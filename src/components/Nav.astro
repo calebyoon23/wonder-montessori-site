@@ -1,0 +1,116 @@
+---
+/**
+ * Nav.astro — Responsive sticky navigation
+ * No emojis. Clean underline hover animation. Mobile hamburger.
+ */
+import { fetchSanity } from '../lib/sanity';
+import { Q, FALLBACK } from '../lib/queries';
+
+const siteInfo = await fetchSanity(Q.siteInfo, FALLBACK.siteInfo);
+
+const navLinks = [
+  { href: '/',         label: 'Home' },
+  { href: '/about',    label: 'About' },
+  { href: '/programs', label: 'Programs' },
+  { href: '/calendar', label: 'Calendar' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header
+  id="site-nav"
+  class="nav-glass fixed top-0 left-0 right-0 z-50 border-b border-[rgba(44,62,45,0.08)] transition-shadow duration-300"
+>
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 flex items-center justify-between h-16 lg:h-[4.5rem]">
+
+    <!-- Logo -->
+    <a href="/" class="flex items-center gap-3 group" aria-label="Wonder Montessori home">
+      <!-- Leaf mark SVG -->
+      <div class="w-9 h-9 rounded-full bg-forest flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-105">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M9 1.5C6 1.5 3 4.5 3 7.5c0 4.5 4.5 8 6 9 1.5-1 6-4.5 6-9 0-3-3-6-6-6z" fill="#C8DECA" opacity="0.9"/>
+          <line x1="9" y1="4.5" x2="9" y2="15" stroke="#7A9E7E" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="9" y1="7" x2="6.5" y2="10.5" stroke="#7A9E7E" stroke-width="1" stroke-linecap="round"/>
+          <line x1="9" y1="7" x2="11.5" y2="10.5" stroke="#7A9E7E" stroke-width="1" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="leading-tight">
+        <span class="block font-serif font-semibold text-forest text-[1.05rem] leading-none">{siteInfo.schoolName}</span>
+        <span class="block font-sans text-[var(--muted)] text-[0.65rem] uppercase tracking-[0.14em] mt-0.5">Est. {siteInfo.established}</span>
+      </div>
+    </a>
+
+    <!-- Desktop Nav -->
+    <nav class="hidden lg:flex items-center gap-8" aria-label="Main navigation">
+      {navLinks.map(link => (
+        <a
+          href={link.href}
+          class={`nav-link font-sans text-sm font-medium ${currentPath === link.href ? 'active text-forest' : 'text-[var(--muted)]'}`}
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+
+    <!-- CTA + Hamburger -->
+    <div class="flex items-center gap-4">
+      <a href="/contact" class="hidden lg:inline-flex btn-terracotta text-sm px-5 py-2.5">
+        Schedule a Tour
+      </a>
+      <button
+        id="hamburger"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+        class="lg:hidden flex flex-col justify-center gap-[5px] w-9 h-9 p-1.5 rounded-lg hover:bg-sand/60 transition-colors"
+      >
+        <span class="block w-full h-[1.5px] bg-forest transition-transform duration-300 origin-center" id="ham-1"></span>
+        <span class="block w-full h-[1.5px] bg-forest transition-opacity duration-200" id="ham-2"></span>
+        <span class="block w-full h-[1.5px] bg-forest transition-transform duration-300 origin-center" id="ham-3"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div
+    id="mobile-menu"
+    class="lg:hidden flex-col gap-0 border-t border-[rgba(44,62,45,0.08)] bg-[rgba(247,243,236,0.97)] backdrop-blur-sm"
+  >
+    <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col gap-0">
+      {navLinks.map(link => (
+        <a
+          href={link.href}
+          class={`nav-link py-3 text-sm font-medium border-b border-[rgba(44,62,45,0.07)] last:border-0 ${currentPath === link.href ? 'active text-forest' : 'text-[var(--muted)]'}`}
+        >
+          {link.label}
+        </a>
+      ))}
+      <a href="/contact" class="btn-terracotta mt-4 w-full justify-center text-sm">
+        Schedule a Tour
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- Spacer for fixed nav -->
+<div class="h-16 lg:h-[4.5rem]"></div>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const menu = document.getElementById('mobile-menu');
+  const h1 = document.getElementById('ham-1');
+  const h2 = document.getElementById('ham-2');
+  const h3 = document.getElementById('ham-3');
+  let isOpen = false;
+
+  hamburger?.addEventListener('click', () => {
+    isOpen = !isOpen;
+    menu?.classList.toggle('open', isOpen);
+    hamburger.setAttribute('aria-expanded', String(isOpen));
+    if (h1 && h2 && h3) {
+      h1.style.transform = isOpen ? 'translateY(6.5px) rotate(45deg)' : '';
+      h2.style.opacity   = isOpen ? '0' : '1';
+      h3.style.transform = isOpen ? 'translateY(-6.5px) rotate(-45deg)' : '';
+    }
+  });
+</script>

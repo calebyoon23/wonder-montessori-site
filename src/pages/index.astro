@@ -1,0 +1,336 @@
+---
+/**
+ * index.astro — Home Page
+ * All content from Sanity with graceful fallbacks. No emojis.
+ * Sections: Hero · Philosophy · Programs preview · Certified Montessori · Tour CTA
+ */
+import Layout from '../layouts/Layout.astro';
+import { fetchSanity } from '../lib/sanity';
+import { Q, FALLBACK } from '../lib/queries';
+
+const siteInfo = await fetchSanity(Q.siteInfo, FALLBACK.siteInfo);
+const programs  = await fetchSanity(Q.programs,  FALLBACK.programs);
+---
+
+<Layout title={`${siteInfo.schoolName} — ${siteInfo.tagline}`}>
+
+  <!-- ══════════════════════════════════════════
+       HERO — Full-bleed photo + animated orbits
+  ══════════════════════════════════════════ -->
+  <section class="relative min-h-screen flex items-center overflow-hidden">
+    <!-- Background photo -->
+    <img
+      src="/images/hero.jpg"
+      alt="Children engaged in learning at Wonder Montessori"
+      class="absolute inset-0 w-full h-full object-cover object-center"
+      loading="eager"
+    />
+    <!-- Gradient overlay -->
+    <div class="absolute inset-0 overlay-forest"></div>
+
+    <!-- Animated orbit circles (decorative) -->
+    <div class="hero-orbit hero-orbit-1 absolute w-[520px] h-[520px] border border-white/10 top-1/2 right-[4%]"
+         style="transform-origin: center center;"></div>
+    <div class="hero-orbit hero-orbit-2 absolute w-[360px] h-[360px] border border-white/8 top-1/2 right-[11%]"
+         style="transform-origin: center center;"></div>
+    <div class="hero-orbit hero-orbit-3 absolute w-[200px] h-[200px] border border-sage/20 top-1/2 right-[18%]"
+         style="transform-origin: center center;"></div>
+
+    <!-- Content -->
+    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 py-28 w-full">
+      <div class="max-w-2xl">
+        <!-- Provenance line -->
+        <div class="flex items-center gap-3 mb-8">
+          <div class="w-8 h-px bg-sage-light flex-shrink-0"></div>
+          <span class="font-sans text-sage-light text-[0.68rem] font-semibold uppercase tracking-[0.2em]">
+            Certified Montessori &nbsp;&middot;&nbsp; Chicago, IL &nbsp;&middot;&nbsp; Est. {siteInfo.established}
+          </span>
+        </div>
+
+        <!-- Headline -->
+        <h1 class="font-serif text-5xl md:text-6xl lg:text-7xl text-white leading-[1.06] mb-7">
+          A place where<br />every child<br /><em class="italic text-sage-light">belongs</em>
+        </h1>
+
+        <!-- Body -->
+        <p class="font-sans text-white/70 text-lg leading-relaxed max-w-md mb-10">
+          A nurturing community where children discover, create, and grow —
+          guided by certified Montessori educators since {siteInfo.established}.
+        </p>
+
+        <!-- CTAs -->
+        <div class="flex flex-wrap gap-4">
+          <a href="/contact" class="btn-terracotta">Schedule a Tour</a>
+          <a href="/programs" class="btn-outline-white">Explore Programs</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll nudge -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1.5 opacity-40">
+      <span class="font-sans text-white text-[0.65rem] uppercase tracking-widest">Scroll</span>
+      <div class="w-px h-10 bg-white/50 animate-pulse"></div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       STATS BAR
+  ══════════════════════════════════════════ -->
+  <section class="bg-forest py-8 px-6">
+    <div class="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      {[
+        { num: '30+', label: 'Years of Excellence' },
+        { num: '4',   label: 'Programs Offered' },
+        { num: '100%', label: 'Certified Teachers' },
+        { num: '2',   label: 'Campus Buildings' },
+      ].map(s => (
+        <div>
+          <div class="font-serif text-3xl text-white font-bold leading-none">{s.num}</div>
+          <div class="font-sans text-white/45 text-[0.68rem] uppercase tracking-widest mt-1">{s.label}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       PHILOSOPHY — 3 pillars with photo
+  ══════════════════════════════════════════ -->
+  <section class="bg-cream py-28 px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+        <!-- Left: Text + pillars -->
+        <div class="reveal">
+          <div class="section-divider">
+            <span class="section-tag" style="margin-bottom:0">Our Philosophy</span>
+          </div>
+          <h2 class="font-serif text-4xl md:text-5xl text-forest mb-6">
+            Education that honors<br /><em class="italic text-sage">every child</em>
+          </h2>
+          <p class="font-sans text-[var(--muted)] leading-relaxed mb-10">
+            We believe the best learning happens when children feel safe, seen, and free to
+            explore. The Montessori method gives each child exactly that — a prepared
+            environment, a caring guide, and time to discover at their own pace.
+          </p>
+
+          <div class="flex flex-col gap-6">
+            {[
+              {
+                num: '01', title: 'Inclusive Community',
+                body: 'Our school reflects the beautiful diversity of Chicago. Every family, every background, every child is not just welcomed — they are celebrated.',
+              },
+              {
+                num: '02', title: 'Child-Led Learning',
+                body: 'Teachers observe and respond rather than direct. Each child follows their natural curiosity, building independence and a love of learning.',
+              },
+              {
+                num: '03', title: 'Whole-Child Growth',
+                body: 'We nurture cognitive, social, emotional, and physical development together — because a thriving child is more than their academic milestones.',
+              },
+            ].map(p => (
+              <div class="flex gap-4 items-start">
+                <span class="font-serif text-3xl font-bold text-sage-light leading-none flex-shrink-0 mt-0.5">{p.num}</span>
+                <div>
+                  <h3 class="font-serif text-lg text-forest mb-1">{p.title}</h3>
+                  <p class="font-sans text-[var(--muted)] text-sm leading-relaxed">{p.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Right: Photo -->
+        <div class="reveal reveal-delay-2">
+          <div class="relative">
+            <img
+              src="/images/children-play.jpg"
+              alt="Children engaged in Montessori activities"
+              class="w-full h-[480px] object-cover rounded-3xl"
+            />
+            <!-- Overlapping card -->
+            <div class="absolute -bottom-6 -left-6 bg-white rounded-2xl px-6 py-4 shadow-card-hover">
+              <div class="font-serif text-2xl text-forest font-bold">Est. {siteInfo.established}</div>
+              <div class="font-sans text-[var(--muted)] text-xs uppercase tracking-wider">Certified Montessori</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       PROGRAMS PREVIEW
+  ══════════════════════════════════════════ -->
+  <section class="bg-sand py-28 px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 mb-12 reveal">
+        <div>
+          <div class="section-divider">
+            <span class="section-tag" style="margin-bottom:0">Programs</span>
+          </div>
+          <h2 class="font-serif text-4xl md:text-5xl text-forest">
+            A program for<br /><em class="italic text-sage">every stage</em>
+          </h2>
+        </div>
+        <a href="/programs" class="btn-outline flex-shrink-0">View All Programs</a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {programs.map((prog, i) => (
+          <a
+            href="/programs"
+            class={`card-hover reveal reveal-delay-${i} block bg-white rounded-3xl overflow-hidden border border-[rgba(44,62,45,0.07)]`}
+          >
+            <div class="relative h-44">
+              <img
+                src={prog.localImage || '/images/primary.jpg'}
+                alt={prog.name}
+                class="w-full h-full object-cover"
+              />
+              <div class="absolute inset-0 overlay-forest-top"></div>
+              <div class="absolute bottom-3 left-4">
+                <span class="font-sans text-white/70 text-[0.65rem] uppercase tracking-wider">{prog.ageRange}</span>
+              </div>
+            </div>
+            <div class="p-5">
+              <h3 class="font-serif text-lg text-forest mb-1">{prog.name}</h3>
+              <p class="font-sans text-[var(--muted)] text-xs leading-relaxed line-clamp-2">{prog.notes}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       CERTIFIED MONTESSORI — Dark forest section
+  ══════════════════════════════════════════ -->
+  <section class="bg-forest py-28 px-6 relative overflow-hidden">
+    <!-- Decorative circle -->
+    <div class="absolute right-0 top-0 w-[500px] h-[500px] border border-white/5 rounded-full -translate-y-1/3 translate-x-1/3"></div>
+    <div class="absolute left-0 bottom-0 w-[300px] h-[300px] bg-sage/8 rounded-full translate-y-1/3 -translate-x-1/3"></div>
+
+    <div class="max-w-6xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+      <!-- Left: Text -->
+      <div class="reveal">
+        <div class="section-divider" style="--tw-border-opacity:0.5">
+          <span class="section-tag" style="color:#C8DECA; margin-bottom:0">Why Certification Matters</span>
+        </div>
+        <h2 class="font-serif text-4xl md:text-5xl text-white mb-6 leading-tight">
+          Real Montessori.<br /><em class="italic text-sage-light">Real results.</em>
+        </h2>
+        <p class="font-sans text-white/60 leading-relaxed mb-4">
+          "Montessori" is not a protected trademark. Any school can use the name without
+          training, certification, or authentic materials.
+        </p>
+        <p class="font-sans text-white/60 leading-relaxed mb-8">
+          Wonder Montessori is affiliated with the <strong class="text-white">American Montessori Society (AMS)</strong>.
+          Our teachers hold Montessori credentials, our classrooms use authentic materials,
+          and our approach is rooted in Dr. Maria Montessori's original research.
+        </p>
+        <a href="/about" class="btn-white">What Makes Us Different</a>
+      </div>
+
+      <!-- Right: Credential cards -->
+      <div class="reveal reveal-delay-2 grid grid-cols-2 gap-4">
+        {[
+          {
+            title: 'AMS Affiliation',
+            body: 'Verified member of the American Montessori Society with regular credentialing.',
+          },
+          {
+            title: 'Certified Teachers',
+            body: 'All lead teachers hold Montessori credentials from accredited programs.',
+          },
+          {
+            title: 'Authentic Materials',
+            body: 'Genuine Montessori learning materials across all classrooms and age levels.',
+          },
+          {
+            title: 'Prepared Environment',
+            body: 'Classrooms are designed to the Montessori standard — child-scale and purposeful.',
+          },
+        ].map((card, i) => (
+          <div class={`reveal reveal-delay-${i} bg-white/6 border border-white/10 rounded-2xl p-5 hover:bg-white/10 transition-colors duration-300`}>
+            <div class="w-8 h-0.5 bg-sage mb-3"></div>
+            <h4 class="font-serif text-sm text-white mb-2">{card.title}</h4>
+            <p class="font-sans text-white/45 text-xs leading-relaxed">{card.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       ABOUT PREVIEW — photo + quote
+  ══════════════════════════════════════════ -->
+  <section class="bg-cream py-28 px-6">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <!-- Photo -->
+      <div class="reveal order-2 lg:order-1">
+        <img
+          src="/images/about.jpg"
+          alt="Teacher working with a student at Wonder Montessori"
+          class="w-full h-[440px] object-cover object-top rounded-3xl"
+        />
+      </div>
+      <!-- Text -->
+      <div class="reveal reveal-delay-2 order-1 lg:order-2">
+        <div class="section-divider">
+          <span class="section-tag" style="margin-bottom:0">Our Story</span>
+        </div>
+        <h2 class="font-serif text-4xl md:text-5xl text-forest mb-6">
+          Founded in 1993<br />by two <em class="italic text-sage">educators</em>
+        </h2>
+        <p class="font-sans text-[var(--muted)] leading-relaxed mb-6">
+          Dr. Gwen Ku and Dr. Peter Ku opened Wonder Montessori with two classrooms
+          and one conviction: every child deserves an education as unique and wonderful as they are,
+          in a community that truly reflects the world around them.
+        </p>
+        <blockquote class="border-l-2 border-terracotta pl-5 italic font-serif text-lg text-forest mb-8 leading-relaxed">
+          "We desired to open a school that would provide a quality Montessori education
+          to a population reflective of today's diverse society."
+          <cite class="block not-italic font-sans text-[var(--muted)] text-sm mt-2">
+            — Dr. Gwen &amp; Dr. Peter Ku, Founders
+          </cite>
+        </blockquote>
+        <a href="/about" class="btn-outline">Read Our Story</a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       TOUR CTA — Sage section
+  ══════════════════════════════════════════ -->
+  <section class="bg-sage py-28 px-6 text-center relative overflow-hidden">
+    <!-- Decorative circle -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-white/10 rounded-full pointer-events-none animate-[orbit_35s_linear_infinite]"></div>
+
+    <div class="relative z-10 max-w-xl mx-auto reveal">
+      <div class="section-divider justify-center" style="--tc:rgba(255,255,255,0.7)">
+        <span class="section-tag" style="color:rgba(255,255,255,0.75); margin-bottom:0">Come Visit Us</span>
+      </div>
+      <h2 class="font-serif text-4xl md:text-5xl text-white mb-5">
+        We'd love to show<br />you around
+      </h2>
+      <p class="font-sans text-white/70 text-lg leading-relaxed mb-8">
+        The best way to experience Wonder Montessori is to see it for yourself.
+        Meet our teachers, explore our classrooms, and feel our community —
+        no pressure, no obligation.
+      </p>
+      <div class="flex flex-wrap gap-4 justify-center">
+        <a href="/contact" class="btn-white">Schedule a Tour</a>
+        <a href={`tel:${siteInfo.phone}`} class="btn-outline-white">{siteInfo.phone}</a>
+      </div>
+      <p class="font-sans text-white/40 text-xs mt-6">{siteInfo.address}</p>
+    </div>
+  </section>
+
+</Layout>

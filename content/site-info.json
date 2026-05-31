@@ -1,0 +1,14 @@
+{
+  "schoolName": "Wonder Montessori",
+  "tagline": "A place where every child belongs",
+  "address": "5644 North Pulaski Road, Chicago, IL 60646",
+  "phone": "(773) 509-1296",
+  "email": "info@wondermontessori.org",
+  "hours": "Monday – Friday, 7:00 AM – 6:00 PM",
+  "established": "1993",
+  "formspreeId": "YOUR_FORMSPREE_ID",
+  "socialLinks": {
+    "facebook": "",
+    "instagram": ""
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "programs": [
+    {
+      "name": "Infant Program",
+      "ageRange": "6 weeks – 18 months",
+      "price": "$2,400/month",
+      "schedule": "Full-day: 7:00 AM – 6:00 PM",
+      "notes": "Half-day options available. Responsive, individualized care in a calm environment.",
+      "emoji": "👶"
+    },
+    {
+      "name": "Toddler & Two's",
+      "ageRange": "18 months – 3 years",
+      "price": "$2,100/month",
+      "schedule": "Full-day: 7:00 AM – 6:00 PM",
+      "notes": "Morning half-day also available. Language-rich, movement-focused classrooms.",
+      "emoji": "🚶"
+    },
+    {
+      "name": "Primary (3–6)",
+      "ageRange": "3 – 6 years",
+      "price": "$1,900/month",
+      "schedule": "Full-day: 7:00 AM – 6:00 PM",
+      "notes": "Half-day (8:30 AM – 12:00 PM) available at $1,200/month. Mixed-age Montessori classroom.",
+      "emoji": "🎒"
+    },
+    {
+      "name": "Summer Program",
+      "ageRange": "All ages",
+      "price": "$1,600/month",
+      "schedule": "June – August, 7:00 AM – 6:00 PM",
+      "notes": "Enrichment themes, outdoor exploration, and seasonal activities. Enroll independently or as add-on.",
+      "emoji": "☀️"
+    }
+  ],
+  "enrollmentFee": "$150 (one-time, non-refundable)",
+  "depositNote": "One month deposit required to hold enrollment. Applied to final month's tuition.",
+  "financialAidNote": "Sliding-scale assistance available for qualifying families. Please ask during your tour."
+}

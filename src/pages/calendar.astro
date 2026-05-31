@@ -1,0 +1,296 @@
+---
+/**
+ * calendar.astro — Calendar & Events Page
+ * Dual-view: month grid (interactive, vanilla JS) + card stack list
+ * All events from Sanity with fallback. No emojis.
+ */
+import Layout from '../layouts/Layout.astro';
+import { fetchSanity } from '../lib/sanity';
+import { Q, FALLBACK } from '../lib/queries';
+import type { Event } from '../lib/queries';
+
+const siteInfo = await fetchSanity(Q.siteInfo, FALLBACK.siteInfo);
+const events: Event[] = await fetchSanity(Q.events, FALLBACK.events);
+
+// Embed events as JSON for the calendar JS
+const eventsJson = JSON.stringify(events);
+---
+
+<Layout
+  title={`Calendar & Events | ${siteInfo.schoolName}`}
+  description="Upcoming events, open houses, and community gatherings at Wonder Montessori School."
+>
+
+  <!-- ══════════════════════════════════════════
+       HERO
+  ══════════════════════════════════════════ -->
+  <section class="bg-forest py-20 px-6 relative overflow-hidden">
+    <div class="absolute right-0 top-0 w-72 h-72 bg-sage/8 rounded-full translate-x-1/2 -translate-y-1/2"></div>
+    <div class="max-w-7xl mx-auto relative z-10">
+      <div class="section-divider">
+        <span class="section-tag" style="color:rgba(200,222,202,0.8); margin-bottom:0">What's Coming Up</span>
+      </div>
+      <h1 class="font-serif text-5xl md:text-6xl text-white leading-tight max-w-2xl">
+        Events &amp; Community<br /><em class="italic text-sage-light">Gatherings</em>
+      </h1>
+      <p class="font-sans text-white/55 mt-4 max-w-lg leading-relaxed">
+        From open houses to family celebrations, there's always something happening at Wonder Montessori.
+        All families are welcome — no RSVP required unless noted.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       DUAL-VIEW CALENDAR
+  ══════════════════════════════════════════ -->
+  <section class="bg-cream py-24 px-6">
+    <div class="max-w-6xl mx-auto">
+
+      <!-- Section header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10 reveal">
+        <div>
+          <div class="section-divider">
+            <span class="section-tag" style="margin-bottom:0">Calendar</span>
+          </div>
+          <h2 class="font-serif text-3xl text-forest">Browse by month or by event</h2>
+        </div>
+        <a href="/contact" class="btn-terracotta flex-shrink-0">Book a Tour</a>
+      </div>
+
+      <!-- Two-column layout -->
+      <div class="cal-wrapper reveal">
+
+        <!-- ── LEFT: Month Grid ── -->
+        <div class="cal-panel">
+          <!-- Nav -->
+          <div class="cal-nav">
+            <button class="cal-nav-btn" id="cal-prev" aria-label="Previous month">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <span class="cal-month-label" id="cal-month-label">Loading…</span>
+            <button class="cal-nav-btn" id="cal-next" aria-label="Next month">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+
+          <!-- Day headers -->
+          <div class="cal-day-header">
+            {['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d => <span>{d}</span>)}
+          </div>
+
+          <!-- Day grid — populated by JS -->
+          <div id="cal-grid"></div>
+
+          <!-- Inline event detail — shown when a date is clicked -->
+          <div id="cal-event-detail"></div>
+
+          <!-- Legend -->
+          <div class="flex items-center gap-2 mt-4 pt-4 border-t border-[rgba(44,62,45,0.08)]">
+            <div class="w-2 h-2 rounded-full bg-terracotta flex-shrink-0"></div>
+            <span class="font-sans text-[var(--muted)] text-xs">Event on this date — click to see details</span>
+          </div>
+        </div>
+
+        <!-- ── RIGHT: Event Card Stack ── -->
+        <div>
+          <h3 class="font-serif text-xl text-forest mb-5">Upcoming Events</h3>
+          <div id="upcoming-events-list" class="event-stack-panel">
+            <!-- Populated by JS -->
+            <p class="font-sans text-[var(--muted)] text-sm">Loading events…</p>
+          </div>
+          <p id="no-events-msg" class="font-sans text-[var(--muted)] text-sm hidden">
+            No upcoming events at this time. Check back soon or
+            <a href="/contact" class="text-sage underline underline-offset-2">contact us</a>.
+          </p>
+        </div>
+      </div>
+
+      <!-- Embedded event data for JS -->
+      <script id="calendar-events-data" type="application/json" set:html={eventsJson}></script>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       STAY IN THE LOOP
+  ══════════════════════════════════════════ -->
+  <section class="bg-white py-24 px-6">
+    <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <div class="reveal">
+        <div class="section-divider">
+          <span class="section-tag" style="margin-bottom:0">Stay Connected</span>
+        </div>
+        <h2 class="font-serif text-3xl md:text-4xl text-forest mb-4">
+          Never miss a<br /><em class="italic text-sage">moment</em>
+        </h2>
+        <p class="font-sans text-[var(--muted)] leading-relaxed mb-6">
+          Enrolled families receive our monthly newsletter with upcoming events, classroom
+          updates, and community news. Prospective families are welcome to join our mailing list.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a href="/contact" class="btn-sage">Schedule a Tour</a>
+          <a href={`mailto:${siteInfo.email}`} class="btn-outline">Get in Touch</a>
+        </div>
+      </div>
+      <div class="reveal reveal-delay-2">
+        <img
+          src="/images/philosophy.jpg"
+          alt="Community at Wonder Montessori"
+          class="w-full h-64 object-cover rounded-3xl"
+        />
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<!-- ══════════════════════════════════════════
+     CALENDAR JAVASCRIPT
+══════════════════════════════════════════ -->
+<script>
+(function () {
+  const dataEl = document.getElementById('calendar-events-data');
+  if (!dataEl) return;
+
+  const allEvents = JSON.parse(dataEl.textContent || '[]');
+
+  const MONTHS = ['January','February','March','April','May','June',
+                  'July','August','September','October','November','December'];
+  const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun',
+                        'Jul','Aug','Sep','Oct','Nov','Dec'];
+  const DAYS_LONG = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+  const today = new Date();
+  let curYear  = today.getFullYear();
+  let curMonth = today.getMonth();
+  let selectedDate = null;
+
+  function getEventsForDate(y: number, m: number, d: number) {
+    const s = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    return allEvents.filter(e => e.date === s);
+  }
+
+  function renderGrid() {
+    const grid = document.getElementById('cal-grid');
+    const label = document.getElementById('cal-month-label');
+    if (!grid || !label) return;
+
+    label.textContent = `${MONTHS[curMonth]} ${curYear}`;
+
+    const firstDay    = new Date(curYear, curMonth, 1).getDay();
+    const daysInMonth = new Date(curYear, curMonth + 1, 0).getDate();
+    const totalCells  = Math.ceil((firstDay + daysInMonth) / 7) * 7;
+
+    let html = '';
+    for (let i = 0; i < totalCells; i++) {
+      const dayNum = i - firstDay + 1;
+      if (dayNum < 1 || dayNum > daysInMonth) {
+        html += '<div class="cal-cell empty"></div>';
+        continue;
+      }
+      const dateStr = `${curYear}-${String(curMonth + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
+      const evs      = getEventsForDate(curYear, curMonth, dayNum);
+      const isToday  = today.getFullYear() === curYear && today.getMonth() === curMonth && today.getDate() === dayNum;
+      const isSel    = selectedDate === dateStr;
+      const hasEv    = evs.length > 0;
+
+      html += `<div
+        class="cal-cell${isToday ? ' today' : ''}${hasEv ? ' has-event' : ''}${isSel ? ' selected' : ''}"
+        ${hasEv ? `onclick="calSelectDate('${dateStr}')"` : ''}
+        ${hasEv ? `title="${evs.map(e => e.title).join(', ')}"` : ''}
+      >
+        <span class="cal-day-num">${dayNum}</span>
+        ${hasEv ? '<span class="cal-event-dot"></span>' : ''}
+      </div>`;
+    }
+
+    grid.innerHTML = html;
+    renderDetail();
+  }
+
+  function renderDetail() {
+    const box = document.getElementById('cal-event-detail');
+    if (!box) return;
+
+    if (!selectedDate) { box.style.display = 'none'; return; }
+
+    const evs = allEvents.filter(e => e.date === selectedDate);
+    if (!evs.length) { box.style.display = 'none'; return; }
+
+    const d = new Date(selectedDate + 'T12:00:00');
+    const dateLabel = `${DAYS_LONG[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+
+    box.style.display = 'block';
+    box.innerHTML = evs.map(e => `
+      <div class="event-detail-card">
+        <h4>${e.title}</h4>
+        <p class="event-detail-meta">${dateLabel}${e.time ? ' &nbsp;·&nbsp; ' + e.time : ''}</p>
+        <p>${e.description}</p>
+      </div>
+    `).join('');
+  }
+
+  function renderUpcoming() {
+    const list = document.getElementById('upcoming-events-list');
+    const noMsg = document.getElementById('no-events-msg');
+    if (!list) return;
+
+    const todayStr = today.toISOString().split('T')[0];
+    const upcoming = allEvents
+      .filter(e => e.date >= todayStr)
+      .sort((a, b) => a.date.localeCompare(b.date));
+
+    if (!upcoming.length) {
+      list.innerHTML = '';
+      noMsg?.classList.remove('hidden');
+      return;
+    }
+
+    noMsg?.classList.add('hidden');
+    list.innerHTML = upcoming.map(e => {
+      const d     = new Date(e.date + 'T12:00:00');
+      const month = MONTHS_SHORT[d.getMonth()];
+      const day   = d.getDate();
+      const weekday = DAYS_LONG[d.getDay()];
+      return `
+        <div class="event-stack-card${e.highlight ? ' featured' : ''}">
+          <div class="event-date-badge">
+            <span class="month">${month}</span>
+            <span class="day">${day}</span>
+          </div>
+          <div class="event-stack-body">
+            ${e.highlight ? '<div style="font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#C4714A;margin-bottom:0.25rem;">Featured</div>' : ''}
+            <h4>${e.title}</h4>
+            <p class="event-stack-meta">${weekday}${e.time ? ' &nbsp;·&nbsp; ' + e.time : ''}</p>
+            <p>${e.description}</p>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Exposed to HTML onclick
+  window['calSelectDate'] = (dateStr) => {
+    selectedDate = selectedDate === dateStr ? null : dateStr;
+    renderGrid();
+  };
+
+  document.getElementById('cal-prev')?.addEventListener('click', () => {
+    curMonth--;
+    if (curMonth < 0) { curMonth = 11; curYear--; }
+    selectedDate = null;
+    renderGrid();
+  });
+
+  document.getElementById('cal-next')?.addEventListener('click', () => {
+    curMonth++;
+    if (curMonth > 11) { curMonth = 0; curYear++; }
+    selectedDate = null;
+    renderGrid();
+  });
+
+  renderGrid();
+  renderUpcoming();
+})();
+</script>

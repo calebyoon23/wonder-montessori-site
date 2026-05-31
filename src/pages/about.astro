@@ -1,0 +1,278 @@
+---
+/**
+ * about.astro — About Us Page
+ * Sanity-driven: siteInfo, staff. No emojis.
+ */
+import Layout from '../layouts/Layout.astro';
+import { fetchSanity } from '../lib/sanity';
+import { Q, FALLBACK } from '../lib/queries';
+
+const siteInfo = await fetchSanity(Q.siteInfo, FALLBACK.siteInfo);
+const staff    = await fetchSanity(Q.staff, FALLBACK.staff);
+---
+
+<Layout
+  title={`About Us | ${siteInfo.schoolName}`}
+  description="Learn about Wonder Montessori — our history, certified Montessori credentials, and our community-first philosophy since 1993."
+>
+
+  <!-- ══════════════════════════════════════════
+       HERO — photo background
+  ══════════════════════════════════════════ -->
+  <section class="relative h-[65vh] min-h-[440px] flex items-end overflow-hidden">
+    <img
+      src="/images/about.jpg"
+      alt="A teacher working closely with a student"
+      class="absolute inset-0 w-full h-full object-cover object-top"
+    />
+    <div class="absolute inset-0 overlay-forest-top"></div>
+    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 pb-14 w-full">
+      <div class="section-divider">
+        <span class="section-tag" style="color:rgba(200,222,202,0.8); margin-bottom:0">About Us</span>
+      </div>
+      <h1 class="font-serif text-5xl md:text-6xl text-white leading-tight max-w-2xl">
+        A school built on<br /><em class="italic text-sage-light">community and care</em>
+      </h1>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       STORY + TIMELINE
+  ══════════════════════════════════════════ -->
+  <section class="bg-cream py-28 px-6">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+
+      <!-- Text -->
+      <div class="reveal">
+        <div class="section-divider">
+          <span class="section-tag" style="margin-bottom:0">Our Beginnings</span>
+        </div>
+        <h2 class="font-serif text-4xl md:text-5xl text-forest mb-6">
+          From two classrooms<br />to a <em class="italic text-sage">thriving campus</em>
+        </h2>
+        <p class="font-sans text-[var(--muted)] leading-relaxed mb-4">
+          In October 1993, Dr. Gwen Ku — after completing her formal Montessori training —
+          opened Wonder Montessori with a bold vision: to bring authentic, high-quality
+          Montessori education to a community as diverse as Chicago itself.
+        </p>
+        <p class="font-sans text-[var(--muted)] leading-relaxed mb-8">
+          Together with Dr. Peter Ku, both holding doctorates in education, they started
+          with two preschool classrooms at 5644 North Pulaski Road. In 2000, they expanded
+          to include infant, toddler, and early elementary programs. Today, two campus
+          buildings serve hundreds of families across Chicago's north side.
+        </p>
+        <blockquote class="border-l-2 border-terracotta pl-5 italic font-serif text-xl text-forest leading-relaxed">
+          "We desired to open a school that would provide a quality Montessori education
+          to a population reflective of today's diverse society."
+          <cite class="block not-italic font-sans text-[var(--muted)] text-sm mt-2">
+            — Dr. Gwen &amp; Dr. Peter Ku, Founders
+          </cite>
+        </blockquote>
+      </div>
+
+      <!-- Timeline card -->
+      <div class="reveal reveal-delay-2">
+        <div class="bg-white rounded-3xl p-8 border border-[rgba(44,62,45,0.07)] relative overflow-hidden">
+          <!-- Top gradient bar -->
+          <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-sage to-terracotta rounded-t-3xl"></div>
+
+          <div class="font-serif text-[7rem] font-bold text-sage/8 leading-none -mt-3 mb-2">1993</div>
+
+          <div class="flex flex-col gap-7">
+            {[
+              {
+                year: '1993', color: 'bg-sage',
+                text: 'Peter and Gwen Ku open Wonder Montessori with two preschool classrooms at 5644 N. Pulaski Road.',
+              },
+              {
+                year: '2000', color: 'bg-terracotta',
+                text: 'School expands to include infant, toddler, and early elementary programs in response to family demand.',
+              },
+              {
+                year: 'Today', color: 'bg-forest',
+                text: 'Two campus buildings, a gymnasium, garden, and age-separated playgrounds serving a beautifully diverse community.',
+              },
+            ].map(item => (
+              <div class="flex gap-4 items-start">
+                <div class="flex flex-col items-center gap-1 flex-shrink-0">
+                  <div class={`${item.color} rounded-full w-2.5 h-2.5 mt-1`}></div>
+                  <div class="w-px flex-1 bg-[rgba(44,62,45,0.1)]"></div>
+                </div>
+                <div class="pb-2">
+                  <span class="font-sans font-semibold text-forest text-sm">{item.year}</span>
+                  <p class="font-sans text-[var(--muted)] text-sm leading-relaxed mt-0.5">{item.text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       CERTIFIED vs MONTESSORI-STYLE
+  ══════════════════════════════════════════ -->
+  <section class="bg-sand py-28 px-6">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-14 reveal">
+        <div class="section-divider justify-center">
+          <span class="section-tag" style="margin-bottom:0">Certification Matters</span>
+        </div>
+        <h2 class="font-serif text-4xl md:text-5xl text-forest">
+          Not all Montessori schools<br /><em class="italic text-sage">are created equal</em>
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Certified -->
+        <div class="reveal bg-white rounded-3xl p-8 border border-[rgba(44,62,45,0.07)]">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="w-8 h-8 rounded-full bg-sage-light flex items-center justify-center flex-shrink-0">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7A9E7E" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+            </div>
+            <h3 class="font-serif text-xl text-forest">Certified Montessori — Us</h3>
+          </div>
+          <ul class="flex flex-col gap-3">
+            {[
+              'AMS-affiliated school with verified membership',
+              'Lead teachers hold Montessori credentials',
+              'Authentic Montessori materials in all classrooms',
+              'Multi-age groupings per Montessori developmental planes',
+              'Child-led curriculum grounded in Dr. Montessori\'s research',
+              'Prepared environment designed to AMS standards',
+            ].map(item => (
+              <li class="flex gap-3 items-start font-sans text-sm text-[var(--muted)]">
+                <svg class="text-sage flex-shrink-0 mt-0.5" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Montessori-style -->
+        <div class="reveal reveal-delay-1 bg-white rounded-3xl p-8 border border-[rgba(44,62,45,0.07)] opacity-80">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="w-8 h-8 rounded-full bg-[rgba(196,113,74,0.1)] flex items-center justify-center flex-shrink-0">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C4714A" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </div>
+            <h3 class="font-serif text-xl text-forest">Montessori-Style — Others</h3>
+          </div>
+          <ul class="flex flex-col gap-3">
+            {[
+              'No required affiliation or oversight',
+              'Teachers may have no Montessori training',
+              'May use generic "Montessori-inspired" materials',
+              'Traditional age-grouped classrooms',
+              'Teacher-directed lesson plans',
+              'No verified environment or methodology standard',
+            ].map(item => (
+              <li class="flex gap-3 items-start font-sans text-sm text-[var(--muted)]">
+                <svg class="text-terracotta flex-shrink-0 mt-0.5" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       PHILOSOPHY — dark section
+  ══════════════════════════════════════════ -->
+  <section class="bg-forest py-28 px-6 relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-80 h-80 bg-sage/6 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+    <div class="max-w-5xl mx-auto relative z-10">
+      <div class="text-center mb-14 reveal">
+        <div class="section-divider justify-center">
+          <span class="section-tag" style="color:#C8DECA; margin-bottom:0">Our Philosophy</span>
+        </div>
+        <h2 class="font-serif text-4xl md:text-5xl text-white">
+          The teacher as a <em class="italic text-sage-light">guide</em>
+        </h2>
+        <p class="font-sans text-white/55 mt-4 max-w-md mx-auto leading-relaxed">
+          In a Montessori classroom, the child is the author of their own learning.
+          The teacher observes, prepares the environment, and responds — not directs.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        {[
+          {
+            title: 'Observe First',
+            body: 'Teachers watch carefully before intervening. Understanding each child allows the right support at the right moment — never too soon, never too late.',
+          },
+          {
+            title: 'Prepared Environment',
+            body: 'Every material, shelf, and inch of our classrooms is intentional — designed to invite exploration and foster independence at every level.',
+          },
+          {
+            title: 'Follow the Child',
+            body: 'Curriculum adapts to the child, not the reverse. Each child works at their own pace, guided by intrinsic motivation, not external pressure.',
+          },
+        ].map((p, i) => (
+          <div class={`reveal reveal-delay-${i} bg-white/6 border border-white/10 rounded-2xl p-7 hover:bg-white/10 transition-colors duration-300`}>
+            <div class="w-8 h-0.5 bg-sage mb-4"></div>
+            <h3 class="font-serif text-lg text-white mb-2">{p.title}</h3>
+            <p class="font-sans text-white/50 text-sm leading-relaxed">{p.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       FOUNDERS / STAFF — from Sanity
+  ══════════════════════════════════════════ -->
+  <section class="bg-cream py-28 px-6">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-14 reveal">
+        <div class="section-divider justify-center">
+          <span class="section-tag" style="margin-bottom:0">Our Team</span>
+        </div>
+        <h2 class="font-serif text-4xl md:text-5xl text-forest">
+          Built by educators.<br /><em class="italic text-sage">Driven by passion.</em>
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+        {staff.map((member, i) => (
+          <div class={`reveal reveal-delay-${i} card-hover bg-white rounded-3xl p-8 border border-[rgba(44,62,45,0.07)]`}>
+            <!-- Photo placeholder or Sanity image -->
+            <div class="w-16 h-16 rounded-full bg-sand flex items-center justify-center mb-5 overflow-hidden">
+              {member.photo ? (
+                <img src={member.photo.asset?._ref || '/images/about.jpg'} alt={member.name} class="w-full h-full object-cover" />
+              ) : (
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7A9E7E" stroke-width="1.5" aria-hidden="true">
+                  <circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 10-16 0"/>
+                </svg>
+              )}
+            </div>
+            <h3 class="font-serif text-xl text-forest mb-0.5">{member.name}</h3>
+            <div class="font-sans text-terracotta text-xs font-semibold uppercase tracking-wider mb-4">{member.title}</div>
+            <p class="font-sans text-[var(--muted)] text-sm leading-relaxed">{member.bio}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+
+  <!-- CTA -->
+  <section class="bg-sage py-24 px-6 text-center relative overflow-hidden">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] border border-white/10 rounded-full pointer-events-none animate-[orbit_35s_linear_infinite]"></div>
+    <div class="relative z-10 max-w-xl mx-auto reveal">
+      <h2 class="font-serif text-4xl text-white mb-4">Come see it for yourself</h2>
+      <p class="font-sans text-white/70 leading-relaxed mb-8">
+        Touring is the best way to experience our community. We welcome every family — no application, no pressure.
+      </p>
+      <a href="/contact" class="btn-white">Book a Free Tour</a>
+    </div>
+  </section>
+
+</Layout>

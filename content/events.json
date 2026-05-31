@@ -1,0 +1,52 @@
+{
+  "events": [
+    {
+      "title": "Summer Open House",
+      "date": "2026-06-10",
+      "time": "10:00 AM – 12:00 PM",
+      "description": "Come meet our teachers, explore our classrooms, and learn about our Montessori philosophy. All families welcome — no RSVP required.",
+      "highlight": true,
+      "emoji": "🌿"
+    },
+    {
+      "title": "Parent Information Night",
+      "date": "2026-06-18",
+      "time": "6:30 PM – 8:00 PM",
+      "description": "An evening session for prospective families to learn about our programs, curriculum, and enrollment process.",
+      "highlight": false,
+      "emoji": "🌙"
+    },
+    {
+      "title": "Garden Planting Day",
+      "date": "2026-06-25",
+      "time": "9:00 AM – 11:00 AM",
+      "description": "Families and children are invited to join us for a morning of planting, soil, and sunshine in our school garden.",
+      "highlight": false,
+      "emoji": "🌱"
+    },
+    {
+      "title": "Fall Enrollment Opens",
+      "date": "2026-07-01",
+      "time": "All Day",
+      "description": "Fall 2026 enrollment opens for new and returning families. Schedule a tour to learn more before spots fill.",
+      "highlight": true,
+      "emoji": "🍂"
+    },
+    {
+      "title": "Music & Movement Morning",
+      "date": "2026-07-15",
+      "time": "9:30 AM – 10:30 AM",
+      "description": "A fun, family-friendly morning of singing, dancing, and musical exploration. Open to all ages — bring the whole family!",
+      "highlight": false,
+      "emoji": "🎵"
+    },
+    {
+      "title": "End-of-Summer Celebration",
+      "date": "2026-08-28",
+      "time": "2:00 PM – 4:00 PM",
+      "description": "Celebrate our summer families and welcome our new fall families with food, art displays, and community time.",
+      "highlight": true,
+      "emoji": "🎉"
+    }
+  ]
+}
