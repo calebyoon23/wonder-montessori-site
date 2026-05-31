@@ -5,3 +5,9 @@ studio/node_modules/
 .env.local
 .DS_Store
 .astro/
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
