@@ -36,7 +36,6 @@ export default defineConfig({
                   .documentId('siteInfo')
               ),
             S.divider(),
-            S.documentTypeListItem('event').title('Events & Calendar'),
             S.documentTypeListItem('program').title('Programs & Pricing'),
             S.documentTypeListItem('staff').title('Staff & Team'),
           ]),

@@ -1,155 +1,166 @@
 ---
 /**
- * programs.astro — Programs & Pricing Page
- * Programs and pricing driven from Sanity. No emojis.
+ * programs.astro — Programs, Curriculum & Tuition
+ * Three programs only. Every tuition figure comes from the 2026–2027 Tuition Plans
+ * document via queries.ts — do not hardcode prices in this file.
  */
 import Layout from '../layouts/Layout.astro';
 import { fetchSanity } from '../lib/sanity';
 import { Q, FALLBACK } from '../lib/queries';
+import { QUOTES, CURRICULUM_AREAS } from '../lib/content';
+import { PROGRAM_PHOTOS } from '../lib/images';
 
 const siteInfo = await fetchSanity(Q.siteInfo, FALLBACK.siteInfo);
-const programs  = await fetchSanity(Q.programs, FALLBACK.programs);
-
-// Curriculum areas (not owner-editable — part of design)
-const curriculumAreas = [
-  { title: 'Language', body: 'Spoken language, reading readiness, writing, and cultural literacy through storytelling, phonics materials, and rich vocabulary work.' },
-  { title: 'Mathematics', body: 'Concrete-to-abstract learning with Montessori math materials — from bead chains to geometry — making numbers tangible and joyful.' },
-  { title: 'Science & Nature', body: 'Hands-on exploration of the natural world: botany, zoology, weather, seasons, and our school garden just outside our doors.' },
-  { title: 'Creative Arts', body: 'Painting, drawing, sculpture, music, and movement — arts are woven throughout the curriculum, never treated as a separate subject.' },
-  { title: 'Practical Life', body: 'Real-life skills — pouring, folding, sweeping, food preparation — build independence, fine motor control, and genuine self-confidence.' },
-  { title: 'Social & Emotional', body: 'Conflict resolution, empathy, community responsibility, and collaboration are woven into every moment of the school day.' },
-];
+const programs = await fetchSanity(Q.programs, FALLBACK.programs);
+const quote    = QUOTES.programs;
 ---
 
 <Layout
-  title={`Programs | ${siteInfo.schoolName}`}
-  description="Explore Wonder Montessori's infant, toddler, primary, and summer programs in Chicago, IL."
+  title={`Programs & Tuition | ${siteInfo.schoolName}`}
+  description="Wonder Montessori's three programs in Chicago, IL: Infant & Toddlers (3–15 months), Toddler & Two's (15–36 months), and 3–6 Primary, with 2026–2027 tuition."
 >
 
   <!-- ══════════════════════════════════════════
-       HERO
+       HERO — type-led
   ══════════════════════════════════════════ -->
-  <section class="relative h-[60vh] min-h-[400px] flex items-end overflow-hidden">
-    <img
-      src="/images/children-play.jpg"
-      alt="Children at Wonder Montessori"
-      class="absolute inset-0 w-full h-full object-cover"
-    />
-    <div class="absolute inset-0 overlay-forest-top"></div>
-    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 pb-14 w-full">
+  <section class="bg-forest py-20 md:py-24 px-6 relative overflow-hidden">
+    <div class="absolute right-0 top-0 w-96 h-96 bg-sage/8 rounded-full translate-x-1/3 -translate-y-1/3"></div>
+    <div class="absolute left-1/4 bottom-0 w-72 h-72 border border-white/5 rounded-full translate-y-1/2"></div>
+
+    <div class="max-w-6xl mx-auto relative z-10">
       <div class="section-divider">
-        <span class="section-tag" style="color:rgba(200,222,202,0.8); margin-bottom:0">Academic Programs</span>
+        <span class="section-tag" style="color:rgba(200,222,202,0.85); margin-bottom:0">Academic Programs</span>
       </div>
-      <h1 class="font-serif text-5xl md:text-6xl text-white leading-tight max-w-2xl">
+      <h1 class="font-serif text-[2.75rem] sm:text-5xl md:text-6xl text-white leading-[1.06] max-w-3xl mb-10">
         A program for every<br /><em class="italic text-sage-light">stage of wonder</em>
       </h1>
+      <!-- Quick jump chips -->
+      <div class="flex flex-wrap gap-3">
+        {programs.map(p => (
+          <a
+            href={`#${p.slug}`}
+            class="inline-flex items-baseline gap-2 rounded-full border border-white/20 px-5 py-2.5 hover:bg-white/10 hover:border-white/40 transition-colors"
+          >
+            <span class="font-sans text-white text-sm font-medium">{p.name}</span>
+            <span class="font-sans text-white/45 text-xs">{p.ageRange}</span>
+          </a>
+        ))}
+      </div>
     </div>
   </section>
 
 
   <!-- ══════════════════════════════════════════
-       PROGRAMS — from Sanity
+       PROGRAMS — one block each, with schedules
   ══════════════════════════════════════════ -->
-  <section class="bg-cream py-28 px-6">
-    <div class="max-w-5xl mx-auto flex flex-col gap-0">
-      {programs.map((prog, i) => (
-        <div class={`reveal reveal-delay-${i % 3} grid grid-cols-1 md:grid-cols-2 gap-0 items-stretch border-b border-[rgba(44,62,45,0.1)] py-16 last:border-b-0`}>
-          <!-- Photo (alternating left/right) -->
-          <div class={`${i % 2 === 1 ? 'md:order-2' : ''} relative h-72 md:h-auto rounded-2xl overflow-hidden`}>
-            <img
-              src={prog.localImage || '/images/primary.jpg'}
-              alt={prog.name}
-              class="w-full h-full object-cover"
-            />
-            <!-- Age badge -->
-            <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-xl px-3 py-1.5">
-              <span class="font-sans text-forest text-xs font-semibold">{prog.ageRange}</span>
+  <section class="bg-cream py-24 md:py-28 px-6">
+    <div class="max-w-6xl mx-auto flex flex-col gap-20 md:gap-28">
+      {programs.map((prog, i) => {
+        const img = PROGRAM_PHOTOS[prog.slug];
+        return (
+          <article id={prog.slug} class="reveal scroll-mt-28">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-start">
+
+              <!-- Photo -->
+              <div class={i % 2 === 1 ? 'lg:order-2' : ''}>
+                {img?.ready ? (
+                  <img
+                    src={img.src}
+                    alt={img.alt}
+                    class="w-full h-72 md:h-[26rem] object-cover rounded-[2rem]"
+                    width="800" height="533" loading="lazy"
+                  />
+                ) : (
+                  <div class="w-full h-72 md:h-[26rem] bg-sand rounded-[2rem]"></div>
+                )}
+              </div>
+
+              <!-- Copy + tuition -->
+              <div class={i % 2 === 1 ? 'lg:order-1' : ''}>
+                <div class="w-8 h-0.5 bg-terracotta mb-5"></div>
+                <h2 class="font-serif text-3xl md:text-4xl text-forest mb-2 leading-tight">{prog.name}</h2>
+                <p class="font-sans text-sage text-sm font-semibold uppercase tracking-[0.14em] mb-8">{prog.ageRange}</p>
+
+                <!-- Schedules & tuition -->
+                <div class="bg-white rounded-3xl border border-[rgba(44,62,45,0.08)] overflow-hidden">
+                  <div class="flex items-baseline justify-between gap-4 px-6 py-4 border-b border-[rgba(44,62,45,0.08)] bg-sand/40">
+                    <h3 class="font-serif text-base text-forest">Schedules &amp; Monthly Tuition</h3>
+                    <span class="font-sans text-[var(--muted)] text-[0.65rem] uppercase tracking-[0.12em]">2026–2027</span>
+                  </div>
+
+                  <table class="w-full">
+                    <caption class="sr-only">{prog.name} schedule options and monthly tuition for 2026–2027</caption>
+                    <thead class="sr-only">
+                      <tr><th scope="col">Schedule</th><th scope="col">Hours</th><th scope="col">Monthly tuition</th></tr>
+                    </thead>
+                    <tbody>
+                      {prog.plans.map(plan => (
+                        <tr class="border-b border-[rgba(44,62,45,0.06)] last:border-0">
+                          <th scope="row" class="text-left font-sans font-medium text-forest text-sm px-6 py-4">
+                            {plan.label}
+                            <span class="block font-normal text-[var(--muted)] text-xs mt-0.5">{plan.hours}</span>
+                          </th>
+                          <td class="px-6 py-4 text-right font-serif text-xl font-bold text-forest whitespace-nowrap">
+                            {plan.price}
+                            <span class="font-sans text-[var(--muted)] text-[0.65rem] font-normal">/mo</span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
-          </div>
-
-          <!-- Text -->
-          <div class={`${i % 2 === 1 ? 'md:order-1 md:pr-10' : 'md:pl-10'} flex flex-col justify-center pt-8 md:pt-0`}>
-            <div class="w-8 h-0.5 bg-terracotta mb-5"></div>
-            <h2 class="font-serif text-3xl text-forest mb-3">{prog.name}</h2>
-            <p class="font-sans text-[var(--muted)] text-sm leading-relaxed mb-5">{prog.notes}</p>
-
-            <div class="flex items-baseline gap-2 mb-1">
-              <span class="pricing-tag">{prog.price}</span>
-            </div>
-            <p class="font-sans text-[var(--muted)] text-xs mb-6">{prog.schedule}</p>
-
-            <a href="/contact" class="btn-outline w-fit">Schedule a Tour</a>
-          </div>
-        </div>
-      ))}
+          </article>
+        );
+      })}
     </div>
   </section>
 
 
   <!-- ══════════════════════════════════════════
-       CURRICULUM AREAS
+       MONTESSORI QUOTE
   ══════════════════════════════════════════ -->
-  <section class="bg-sand py-28 px-6">
-    <div class="max-w-5xl mx-auto">
+  <section class="bg-sage py-20 px-6">
+    <figure class="max-w-3xl mx-auto text-center reveal">
+      <div class="w-10 h-px bg-white/50 mx-auto mb-8"></div>
+      <blockquote class="font-serif italic text-2xl md:text-[1.9rem] text-white leading-[1.45]">
+        “{quote.text}”
+      </blockquote>
+      <figcaption class="font-sans text-white/65 text-xs uppercase tracking-[0.18em] mt-7">
+        {quote.attribution}
+      </figcaption>
+    </figure>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       CURRICULUM
+  ══════════════════════════════════════════ -->
+  <section class="bg-cream py-24 md:py-28 px-6">
+    <div class="max-w-6xl mx-auto">
       <div class="text-center mb-14 reveal">
         <div class="section-divider justify-center">
           <span class="section-tag" style="margin-bottom:0">The Montessori Curriculum</span>
         </div>
-        <h2 class="font-serif text-4xl md:text-5xl text-forest">
+        <h2 class="font-serif text-4xl md:text-5xl text-forest leading-[1.1]">
           Tailored to each child.<br /><em class="italic text-sage">Not one-size-fits-all.</em>
         </h2>
+        <p class="font-sans text-[var(--muted)] leading-relaxed max-w-xl mx-auto mt-5">
+          A child is never forced to take part in an activity. They are gently guided and
+          offered alternatives. These areas begin in earnest in Toddler &amp; Two’s and 3–6
+          Primary, with introductory lessons at the Infant &amp; Toddlers level.
+        </p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {curriculumAreas.map((area, i) => (
-          <div class={`reveal reveal-delay-${i % 3} bg-white rounded-2xl p-6 border border-[rgba(44,62,45,0.07)] card-hover`}>
+        {CURRICULUM_AREAS.map((area, i) => (
+          <div class={`reveal reveal-delay-${i % 3} bg-white rounded-2xl p-7 border border-[rgba(44,62,45,0.07)] card-hover`}>
             <div class="w-6 h-0.5 bg-sage mb-4"></div>
-            <h3 class="font-serif text-lg text-forest mb-2">{area.title}</h3>
+            <h3 class="font-serif text-lg text-forest mb-2.5">{area.title}</h3>
             <p class="font-sans text-[var(--muted)] text-sm leading-relaxed">{area.body}</p>
           </div>
         ))}
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ══════════════════════════════════════════
-       PRICING TABLE — from Sanity
-  ══════════════════════════════════════════ -->
-  <section class="bg-white py-28 px-6">
-    <div class="max-w-4xl mx-auto">
-      <div class="text-center mb-12 reveal">
-        <div class="section-divider justify-center">
-          <span class="section-tag" style="margin-bottom:0">Tuition</span>
-        </div>
-        <h2 class="font-serif text-4xl md:text-5xl text-forest">
-          Transparent pricing.<br /><em class="italic text-sage">No surprises.</em>
-        </h2>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
-        {programs.map((prog, i) => (
-          <div class={`reveal reveal-delay-${i % 2} card-hover bg-cream rounded-3xl p-7 border border-[rgba(44,62,45,0.07)]`}>
-            <div class="flex justify-between items-start mb-4">
-              <div>
-                <h3 class="font-serif text-xl text-forest mb-0.5">{prog.name}</h3>
-                <span class="font-sans text-sage text-xs font-semibold">{prog.ageRange}</span>
-              </div>
-              <div class="text-right">
-                <div class="pricing-tag text-2xl">{prog.price}</div>
-              </div>
-            </div>
-            <div class="font-sans text-[var(--muted)] text-xs border-t border-[rgba(44,62,45,0.08)] pt-3">{prog.schedule}</div>
-            {prog.notes && <p class="font-sans text-[var(--muted)] text-xs mt-2 leading-relaxed">{prog.notes}</p>}
-          </div>
-        ))}
-      </div>
-
-      <!-- Financial aid note -->
-      <div class="reveal bg-sage-light rounded-2xl p-6 text-center">
-        <p class="font-sans text-forest text-sm leading-relaxed">
-          <strong class="font-semibold">Financial assistance available.</strong> Sliding-scale aid is available for qualifying families. Please ask about this during your tour — we believe every family deserves access to quality Montessori education.
-        </p>
       </div>
     </div>
   </section>
@@ -162,8 +173,10 @@ const curriculumAreas = [
     </div>
     <div class="relative z-10 max-w-xl mx-auto reveal">
       <h2 class="font-serif text-4xl text-white mb-4">Ready to find the right fit?</h2>
-      <p class="font-sans text-white/55 leading-relaxed mb-8">
-        Come in for a tour and we'll walk you through the right program for your child's age and needs. No obligation — just a warm welcome.
+      <p class="font-sans text-white/60 leading-relaxed mb-8">
+        Come in for a tour and we'll walk you through the right program for your child's
+        age and needs. Tours take 25–30 minutes, and we highly prefer that parents bring
+        their child along.
       </p>
       <div class="flex flex-wrap gap-4 justify-center">
         <a href="/contact" class="btn-white">Schedule a Tour</a>

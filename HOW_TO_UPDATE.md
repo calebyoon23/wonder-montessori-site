@@ -17,35 +17,58 @@ That's it — you're in.
 ## What you can edit
 
 ### School Information
-> Controls: school name, tagline, address, phone, email, office hours, hero photo
+> Controls: school name, tagline, address, phone, fax, extensions, email, hours,
+> program locations, and the Google Calendar ID
 
-Click **School Information** in the left sidebar. Change any field, then click the blue **Publish** button.
+Click **School Information** in the left sidebar. The fields are split into three tabs —
+**Identity**, **Contact**, and **Calendar & Forms**. Change any field, then click the blue
+**Publish** button.
 
 Your website will automatically update within about 1 minute.
 
----
-
-### Programs & Pricing
-> Controls: each program's name, age range, price, schedule, description, and photo
-
-Click **Programs & Pricing**. You'll see a list of your programs.
-
-- **To change a price**: Click the program → find the "Monthly Tuition" field → type the new price → Publish
-- **To add a new program**: Click the **"+"** button at the top right → fill in the fields → Publish
-- **To remove a program**: Open it → click the **"..."** menu → Delete
+Changing the phone number, address, or hours here updates them **everywhere** on the
+site at once — the footer, the tour page, and the map all read from this one place.
 
 ---
 
-### Events & Calendar
-> Controls: all events shown on the Calendar page
+### Programs & Tuition
+> Controls: each program's name, age range, description, schedules, tuition, and photo
 
-Click **Events & Calendar**. You'll see a list of all upcoming events.
+Click **Programs**. You'll see your three programs: Infant & Toddlers, Toddler & Two's,
+and 3–6 Primary.
 
-- **To add an event**: Click **"+"** → fill in Title, Date, Time, Description → choose whether it's "Featured" → Publish
-- **To remove a past event**: Open it → click "..." → Delete
-- **Featured events** appear at the top of the calendar with a highlighted border
+- **To change tuition**: Click the program → scroll to **Schedules & Monthly Tuition** →
+  each row is one schedule option (for example "5 Full Days", "7:00 AM – 6:00 PM", "$2,230").
+  Edit the price → Publish
+- **To add a schedule option**: In that same list, click **"Add item"** → fill in the
+  schedule name, hours, and price → Publish
+- **To reorder programs**: Change the "Display Order" number. Youngest program should be 1.
 
-**Date format**: Use the date picker — just click on the calendar that appears in the Date field.
+> **Every year:** when the new Tuition Plans document is finalized, update the prices here
+> so the website matches it. The website has no other copy of these numbers.
+
+---
+
+### The Calendar
+> Controls: school closings, holidays, and events on the Calendar page
+
+**This is no longer edited on the website.** The Calendar page displays your school's
+Google Calendar directly, so whatever you put in Google Calendar appears on the website
+automatically — usually within a few minutes.
+
+- **To add a closing or event**: Add it in Google Calendar as you normally would
+- **To change or delete one**: Change or delete it in Google Calendar
+- **No publishing step, no waiting on your web developer**
+
+The calendar being displayed is **wondermontessori60646@gmail.com**.
+
+**Important:** that calendar must stay set to public, or visitors will see an error
+instead of your dates. To check: open Google Calendar → hover the calendar name →
+**⋮** → **Settings and sharing** → **Access permissions for events** → make sure
+**"Make available to public"** is checked.
+
+If you ever switch to a different Google Calendar, paste its Calendar ID into the
+**Google Calendar ID** field under **School Information → Calendar & Forms** in Sanity.
 
 ---
 
@@ -77,6 +100,29 @@ If you don't see the change, try a **hard refresh** in your browser (hold Shift 
 - Changes won't appear on the live site until you click **Publish**
 - If you make a mistake, click the **History** icon to see previous versions and restore them
 - You can upload photos directly by clicking the image field and dragging a photo in
+- **Calendar changes are the exception** — they happen in Google Calendar, with no Publish step
+
+---
+
+## What is *not* edited in Sanity
+
+A few things live in the website's code and need your web developer:
+
+| What | Where it lives |
+|---|---|
+| Calendar events and closings | **Google Calendar** — see the Calendar section above |
+| Curriculum areas, tuition policy, daily schedule | `src/lib/content.ts` |
+| Photographs | `src/lib/images.ts` — see `PHOTO_SWAP_LIST.md` |
+| Page layouts and wording outside the fields above | The page files in `src/pages/` |
+
+---
+
+## Keeping the site honest
+
+The website's facts come from two documents: the **Parent Handbook** and the current
+year's **Tuition Plans**. When either is revised, tell your web developer — the tuition
+figures, program names, age ranges, and contact details on the site all need to be
+re-checked against the new version.
 
 ---
 

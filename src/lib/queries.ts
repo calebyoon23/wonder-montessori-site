@@ -1,6 +1,14 @@
 /**
  * src/lib/queries.ts
  * GROQ queries for Sanity, plus fallback data used when Sanity is not configured.
+ *
+ * SOURCE OF TRUTH
+ * ---------------
+ * Every fact below is taken from one of two documents. Do not change these
+ * values without checking them against the current revision of:
+ *   · WMS Parent Handbook (Rev. 08/24)  — contact, hours, policies, curriculum
+ *   · WMS Tuition Plans, Academic Year 2026–2027 — all tuition figures
+ *
  * To swap in real data: configure SANITY_PROJECT_ID in .env and populate Sanity Studio.
  */
 
@@ -8,40 +16,52 @@
 
 export const Q = {
   siteInfo: `*[_type == "siteInfo"][0]`,
-  events:   `*[_type == "event"] | order(date asc) { title, date, time, description, highlight }`,
-  programs: `*[_type == "program"] | order(order asc) { name, ageRange, price, schedule, notes, heroImage }`,
+  programs: `*[_type == "program"] | order(order asc) {
+    name, slug, ageRange, plans, heroImage
+  }`,
   staff:    `*[_type == "staff"]   | order(order asc) { name, title, bio, photo }`,
 };
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 export interface SiteInfo {
+  /** Short brand name used in the nav and page titles. */
   schoolName: string;
+  /** Full legal name, used in the footer and legal/nonprofit copy. */
+  legalName: string;
   tagline: string;
+  /** Campus address shown across the site. */
   address: string;
+  cityState: string;
   phone: string;
+  fax: string;
   email: string;
   hours: string;
   established: string;
   formspreeId: string;
+  /** Public Google Calendar ID powering the Calendar page. */
+  calendarId: string;
+  /** IANA timezone used by the Google Calendar embed. */
+  timezone: string;
 }
 
-export interface Event {
-  title: string;
-  date: string;       // YYYY-MM-DD
-  time: string;
-  description: string;
-  highlight: boolean;
+export interface TuitionPlan {
+  /** e.g. "5 Full Days" */
+  label: string;
+  /** e.g. "7:00 AM – 6:00 PM" */
+  hours: string;
+  /** Monthly tuition, formatted for display. */
+  price: string;
 }
 
 export interface Program {
+  slug: string;
   name: string;
   ageRange: string;
-  price: string;
-  schedule: string;
-  notes: string;
+  plans: TuitionPlan[];
   heroImage?: { asset?: { _ref?: string } };
-  localImage?: string; // fallback local path
+  /** Fallback local path used when Sanity is not configured. */
+  localImage?: string;
 }
 
 export interface StaffMember {
@@ -55,111 +75,91 @@ export interface StaffMember {
 
 export const FALLBACK: {
   siteInfo: SiteInfo;
-  events: Event[];
   programs: Program[];
   staff: StaffMember[];
 } = {
   siteInfo: {
     schoolName: 'Wonder Montessori',
+    legalName: 'Wonder Montessori School',
     tagline: 'A place where every child belongs',
-    address: '5644 North Pulaski Road, Chicago, IL 60646',
+    address: '5622–5644 North Pulaski Road',
+    cityState: 'Chicago, IL 60646',
     phone: '(773) 509-1296',
+    fax: '773-337-6337',
     email: 'info@wondermontessori.org',
     hours: 'Monday – Friday, 7:00 AM – 6:00 PM',
     established: '1993',
     formspreeId: 'YOUR_FORMSPREE_ID',
+    calendarId: 'wondermontessori60646@gmail.com',
+    timezone: 'America/Chicago',
   },
 
-  events: [
-    {
-      title: 'Summer Open House',
-      date: '2026-06-10',
-      time: '10:00 AM – 12:00 PM',
-      description: 'Come meet our teachers, explore our classrooms, and learn about our Montessori philosophy. All families welcome.',
-      highlight: true,
-    },
-    {
-      title: 'Parent Information Evening',
-      date: '2026-06-18',
-      time: '6:30 PM – 8:00 PM',
-      description: 'An evening session for prospective families to learn about our programs, curriculum, and enrollment process.',
-      highlight: false,
-    },
-    {
-      title: 'Garden Planting Day',
-      date: '2026-06-25',
-      time: '9:00 AM – 11:00 AM',
-      description: 'Families are invited to join us for a morning of planting and tending to our school garden together.',
-      highlight: false,
-    },
-    {
-      title: 'Fall Enrollment Opens',
-      date: '2026-07-01',
-      time: 'All Day',
-      description: 'Fall 2026 enrollment opens for new and returning families. Schedule a tour to secure your spot.',
-      highlight: true,
-    },
-    {
-      title: 'Music & Movement Morning',
-      date: '2026-07-15',
-      time: '9:30 AM – 10:30 AM',
-      description: 'A family-friendly morning of singing, movement, and musical exploration. Open to children of all ages.',
-      highlight: false,
-    },
-    {
-      title: 'End-of-Summer Celebration',
-      date: '2026-08-28',
-      time: '2:00 PM – 4:00 PM',
-      description: 'Celebrate our summer families and welcome our new fall families with food, art displays, and community time.',
-      highlight: true,
-    },
-  ],
-
+  // Tuition figures below are verbatim from the 2026–2027 Tuition Plans document.
   programs: [
     {
-      name: 'Infant Program',
-      ageRange: '6 weeks – 18 months',
-      price: '$2,400 / month',
-      schedule: 'Full-day · 7:00 AM – 6:00 PM',
-      notes: 'Half-day options available. Responsive, individualized care in a calm home-like environment.',
+      slug: 'infant-toddlers',
+      name: 'Infant & Toddlers',
+      ageRange: '3 months – 15 months',
+      plans: [
+        { label: '5 Full Days', hours: '7:00 AM – 6:00 PM', price: '$2,230' },
+        { label: '4 Full Days', hours: '7:00 AM – 6:00 PM', price: '$2,155' },
+        { label: '3 Full Days', hours: '7:00 AM – 6:00 PM', price: '$2,085' },
+      ],
       localImage: '/images/infant.jpg',
     },
     {
+      slug: 'toddler-twos',
       name: "Toddler & Two's",
-      ageRange: '18 months – 3 years',
-      price: '$2,100 / month',
-      schedule: 'Full-day · 7:00 AM – 6:00 PM',
-      notes: 'Half-day mornings also available. Language-rich, movement-focused Montessori environment.',
+      ageRange: '15 months – 36 months',
+      plans: [
+        { label: '5 Full Days', hours: '7:00 AM – 6:00 PM', price: '$2,000' },
+        { label: '4 Full Days', hours: '7:00 AM – 6:00 PM', price: '$1,945' },
+        { label: '3 Full Days', hours: '7:00 AM – 6:00 PM', price: '$1,845' },
+        { label: '5 Half Days', hours: '8:30 AM – 12:00 PM', price: '$1,620' },
+      ],
       localImage: '/images/toddler.jpg',
     },
     {
-      name: 'Primary (3–6)',
+      slug: 'primary',
+      name: '3–6 Primary',
       ageRange: '3 – 6 years',
-      price: '$1,900 / month',
-      schedule: 'Full-day · 7:00 AM – 6:00 PM',
-      notes: 'Half-day (8:30 AM – 12:00 PM) available at $1,200/month. Mixed-age Montessori classroom.',
+      plans: [
+        { label: '5 Full Days',           hours: '7:00 AM – 6:00 PM',  price: '$1,640' },
+        { label: '4 Full Days',           hours: '7:00 AM – 6:00 PM',  price: '$1,585' },
+        { label: '3 Full Days',           hours: '7:00 AM – 6:00 PM',  price: '$1,500' },
+        { label: '5 Extended Half Days',  hours: '8:30 AM – 2:30 PM',  price: '$1,510' },
+        { label: '3 Extended Half Days',  hours: '8:30 AM – 2:30 PM',  price: '$1,420' },
+        { label: '5 Half Days',           hours: '8:30 AM – 12:00 PM', price: '$1,400' },
+      ],
       localImage: '/images/primary.jpg',
-    },
-    {
-      name: 'Summer Program',
-      ageRange: 'All ages',
-      price: '$1,600 / month',
-      schedule: 'June – August · 7:00 AM – 6:00 PM',
-      notes: 'Weekly enrichment themes, outdoor exploration, and seasonal activities. Enroll independently or as add-on.',
-      localImage: '/images/summer.jpg',
     },
   ],
 
   staff: [
     {
       name: 'Dr. Gwen Ku',
-      title: 'Co-Founder & Montessori Director',
-      bio: 'After completing formal Montessori training and earning her doctorate in education, Dr. Gwen Ku opened Wonder Montessori in October 1993 with a vision of inclusive, high-quality early childhood education for all Chicago families.',
+      title: 'Co-Founder & Directress',
+      bio: 'Educated in Seoul and the United States, Dr. Gwen Ku holds bachelor’s and master’s degrees in education and completed further training in the Montessori curriculum. After teaching in suburban Montessori schools and finding them short on the diversity she valued, she founded Wonder Montessori in October 1993.',
     },
     {
       name: 'Dr. Peter Ku',
       title: 'Co-Founder & Director',
-      bio: 'Holding a doctorate in education, Dr. Peter Ku joined Dr. Gwen Ku in building Wonder Montessori — providing leadership, administrative vision, and an unwavering commitment to the school\'s founding values.',
+      bio: 'Dr. Peter Ku holds bachelor’s and master’s degrees in education, earned in Seoul and the United States, and built a career in business before joining Gwen in founding the school. He leads Wonder Montessori’s administration and its long-term commitment to the families it serves.',
     },
   ],
 };
+
+// ─── Derived helpers ─────────────────────────────────────────────────────────
+
+/** Full one-line address, e.g. "5622–5644 North Pulaski Road, Chicago, IL 60646". */
+export function fullAddress(info: SiteInfo): string {
+  return `${info.address}, ${info.cityState}`;
+}
+
+/** Lowest monthly price across a program's schedules, for "from $X" copy. */
+export function lowestPrice(program: Program): string {
+  const cheapest = program.plans.reduce((min, p) =>
+    Number(p.price.replace(/[^0-9]/g, '')) < Number(min.price.replace(/[^0-9]/g, '')) ? p : min
+  );
+  return cheapest.price;
+}

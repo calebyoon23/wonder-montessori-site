@@ -58,6 +58,7 @@ const currentPath = Astro.url.pathname;
       <button
         id="hamburger"
         aria-label="Toggle menu"
+        aria-controls="mobile-menu"
         aria-expanded="false"
         class="lg:hidden flex flex-col justify-center gap-[5px] w-9 h-9 p-1.5 rounded-lg hover:bg-sand/60 transition-colors"
       >
@@ -73,7 +74,7 @@ const currentPath = Astro.url.pathname;
     id="mobile-menu"
     class="lg:hidden flex-col gap-0 border-t border-[rgba(44,62,45,0.08)] bg-[rgba(247,243,236,0.97)] backdrop-blur-sm"
   >
-    <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col gap-0">
+    <div class="w-full max-w-7xl mx-auto px-6 py-4 flex flex-col gap-0">
       {navLinks.map(link => (
         <a
           href={link.href}

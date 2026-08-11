@@ -3,9 +3,10 @@
  * Footer.astro — Site footer. No emojis. School info from Sanity.
  */
 import { fetchSanity } from '../lib/sanity';
-import { Q, FALLBACK } from '../lib/queries';
+import { Q, FALLBACK, fullAddress } from '../lib/queries';
 
 const siteInfo = await fetchSanity(Q.siteInfo, FALLBACK.siteInfo);
+const programs = await fetchSanity(Q.programs, FALLBACK.programs);
 const year = new Date().getFullYear();
 ---
 
@@ -28,19 +29,30 @@ const year = new Date().getFullYear();
             <span class="block text-white/35 text-[0.62rem] uppercase tracking-[0.14em] mt-0.5">Est. {siteInfo.established}</span>
           </div>
         </a>
-        <p class="font-sans text-sm leading-relaxed max-w-xs mb-6 text-white/50">{siteInfo.tagline} — nurturing curious minds and compassionate hearts since {siteInfo.established}.</p>
-        <div class="flex flex-col gap-2 text-sm font-sans">
+        <p class="font-sans text-sm leading-relaxed max-w-xs mb-6 text-white/50">
+          A 501(c)(3) non-profit, non-sectarian Montessori school, nurturing curious minds
+          and compassionate hearts since {siteInfo.established}.
+        </p>
+        <div class="flex flex-col gap-2.5 text-sm font-sans">
           <a href={`tel:${siteInfo.phone}`} class="hover:text-white transition-colors flex items-center gap-2.5">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="text-sage flex-shrink-0" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.5 10.81 19.79 19.79 0 01.46 2.18 2 2 0 012.44 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.18 6.18l.77-.77a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
             {siteInfo.phone}
           </a>
+          <span class="flex items-center gap-2.5">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="text-sage flex-shrink-0" aria-hidden="true"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+            Fax {siteInfo.fax}
+          </span>
           <a href={`mailto:${siteInfo.email}`} class="hover:text-white transition-colors flex items-center gap-2.5">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="text-sage flex-shrink-0" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
             {siteInfo.email}
           </a>
+          <span class="flex items-start gap-2.5">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="text-sage flex-shrink-0 mt-1" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            {fullAddress(siteInfo)}
+          </span>
           <span class="flex items-center gap-2.5">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="text-sage flex-shrink-0" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            {siteInfo.address}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="text-sage flex-shrink-0" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            {siteInfo.hours}
           </span>
         </div>
       </div>
@@ -64,23 +76,23 @@ const year = new Date().getFullYear();
       <!-- Programs -->
       <div>
         <h5 class="text-white text-xs font-semibold uppercase tracking-[0.12em] mb-5 font-sans">Programs</h5>
-        <ul class="flex flex-col gap-2.5">
-          {[
-            'Infant Program',
-            "Toddler & Two's",
-            'Primary (3–6)',
-            'Summer Program',
-          ].map(p => (
-            <li><a href="/programs" class="font-sans text-sm hover:text-white transition-colors">{p}</a></li>
+        <ul class="flex flex-col gap-3">
+          {programs.map(p => (
+            <li>
+              <a href={`/programs#${p.slug}`} class="font-sans text-sm hover:text-white transition-colors block leading-tight">
+                {p.name}
+                <span class="block text-white/30 text-xs mt-0.5">{p.ageRange}</span>
+              </a>
+            </li>
           ))}
         </ul>
       </div>
     </div>
 
     <!-- Bottom bar -->
-    <div class="border-t border-white/10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 font-sans text-xs text-white/30">
-      <span>&copy; {year} {siteInfo.schoolName}. All rights reserved.</span>
-      <span>Certified Montessori &middot; Chicago, IL</span>
+    <div class="border-t border-white/10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 font-sans text-xs text-white/30 text-center sm:text-left">
+      <span>&copy; {year} {siteInfo.legalName}. All rights reserved.</span>
+      <span>A 501(c)(3) non-profit &middot; Full member, American Montessori Society</span>
     </div>
   </div>
 </footer>

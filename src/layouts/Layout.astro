@@ -13,7 +13,7 @@ interface Props {
 
 const {
   title,
-  description = 'Wonder Montessori School — A certified Montessori school in Chicago, IL. Serving infants through elementary since 1993.',
+  description = 'Wonder Montessori School is a 501(c)(3) non-profit, non-sectarian Montessori school in Chicago, IL, serving children from three months to six years since 1993.',
 } = Astro.props;
 ---
 
@@ -30,6 +30,8 @@ const {
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:type" content="website" />
+  <meta property="og:image" content="/images/school-building.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
 </head>
 <body>
   <Nav />

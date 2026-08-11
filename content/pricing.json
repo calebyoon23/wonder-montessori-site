@@ -1,39 +1,50 @@
 {
+  "_comment": "Tuition figures are verbatim from 'WMS 2026-2027 Tuition Plans'. Mirrors FALLBACK.programs in src/lib/queries.ts — keep the two in sync.",
+  "academicYear": "2026–2027",
   "programs": [
     {
-      "name": "Infant Program",
-      "ageRange": "6 weeks – 18 months",
-      "price": "$2,400/month",
-      "schedule": "Full-day: 7:00 AM – 6:00 PM",
-      "notes": "Half-day options available. Responsive, individualized care in a calm environment.",
-      "emoji": "👶"
+      "slug": "infant-toddlers",
+      "name": "Infant & Toddlers",
+      "ageRange": "3 months – 15 months",
+      "plans": [
+        { "label": "5 Full Days", "hours": "7:00 AM – 6:00 PM", "price": "$2,230" },
+        { "label": "4 Full Days", "hours": "7:00 AM – 6:00 PM", "price": "$2,155" },
+        { "label": "3 Full Days", "hours": "7:00 AM – 6:00 PM", "price": "$2,085" }
+      ],
+      "mealNote": "Families provide food, milk, or formula for infants. Once a child reaches 15 months and is eating solid foods, a catered organic lunch is served with parental approval."
     },
     {
+      "slug": "toddler-twos",
       "name": "Toddler & Two's",
-      "ageRange": "18 months – 3 years",
-      "price": "$2,100/month",
-      "schedule": "Full-day: 7:00 AM – 6:00 PM",
-      "notes": "Morning half-day also available. Language-rich, movement-focused classrooms.",
-      "emoji": "🚶"
+      "ageRange": "15 months – 36 months",
+      "plans": [
+        { "label": "5 Full Days", "hours": "7:00 AM – 6:00 PM", "price": "$2,000" },
+        { "label": "4 Full Days", "hours": "7:00 AM – 6:00 PM", "price": "$1,945" },
+        { "label": "3 Full Days", "hours": "7:00 AM – 6:00 PM", "price": "$1,845" },
+        { "label": "5 Half Days", "hours": "8:30 AM – 12:00 PM", "price": "$1,620" }
+      ],
+      "mealNote": "All schedules include catered organic lunches and snacks."
     },
     {
-      "name": "Primary (3–6)",
+      "slug": "primary",
+      "name": "3–6 Primary",
       "ageRange": "3 – 6 years",
-      "price": "$1,900/month",
-      "schedule": "Full-day: 7:00 AM – 6:00 PM",
-      "notes": "Half-day (8:30 AM – 12:00 PM) available at $1,200/month. Mixed-age Montessori classroom.",
-      "emoji": "🎒"
-    },
-    {
-      "name": "Summer Program",
-      "ageRange": "All ages",
-      "price": "$1,600/month",
-      "schedule": "June – August, 7:00 AM – 6:00 PM",
-      "notes": "Enrichment themes, outdoor exploration, and seasonal activities. Enroll independently or as add-on.",
-      "emoji": "☀️"
+      "plans": [
+        { "label": "5 Full Days", "hours": "7:00 AM – 6:00 PM", "price": "$1,640" },
+        { "label": "4 Full Days", "hours": "7:00 AM – 6:00 PM", "price": "$1,585" },
+        { "label": "3 Full Days", "hours": "7:00 AM – 6:00 PM", "price": "$1,500" },
+        { "label": "5 Extended Half Days", "hours": "8:30 AM – 2:30 PM", "price": "$1,510" },
+        { "label": "3 Extended Half Days", "hours": "8:30 AM – 2:30 PM", "price": "$1,420" },
+        { "label": "5 Half Days", "hours": "8:30 AM – 12:00 PM", "price": "$1,400" }
+      ],
+      "mealNote": "All schedules include catered organic lunches and snacks. Children must be fully potty-trained for this program."
     }
   ],
-  "enrollmentFee": "$150 (one-time, non-refundable)",
-  "depositNote": "One month deposit required to hold enrollment. Applied to final month's tuition.",
-  "financialAidNote": "Sliding-scale assistance available for qualifying families. Please ask during your tour."
+  "notes": {
+    "earlyDropOff": "For the school day program, early drop-offs before 8:30 AM may be arranged with the school for an additional fee.",
+    "annualDiscount": "Paying annually represents a 5% discount off monthly tuition.",
+    "siblingDiscount": "10% discount applied to the tuition of the child with the lower rate.",
+    "proration": "Tuition is not prorated. Monthly rates already account for school closing days.",
+    "registrationFees": "A one-time application fee, a one-time family fee, and a refundable security deposit are due at registration. Amounts are not published in the handbook — contact the school."
+  }
 }

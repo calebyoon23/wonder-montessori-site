@@ -1,249 +1,254 @@
 ---
 /**
- * contact.astro — Book a Tour Page
+ * contact.astro — Schedule a Tour
  * #1 priority page. Tone: warm, welcoming, NOT application-focused.
- * Form via Formspree. School info from Sanity. No emojis.
+ * Form via Formspree. Contact details verified against the Parent Handbook (Rev. 08/24).
  */
 import Layout from '../layouts/Layout.astro';
 import { fetchSanity } from '../lib/sanity';
-import { Q, FALLBACK } from '../lib/queries';
+import { Q, FALLBACK, fullAddress } from '../lib/queries';
+import { QUOTES } from '../lib/content';
 
 const siteInfo = await fetchSanity(Q.siteInfo, FALLBACK.siteInfo);
 const formAction = `https://formspree.io/f/${siteInfo.formspreeId}`;
+const address = fullAddress(siteInfo);
+const quote = QUOTES.tour;
+
+const tourTimes = [
+  'Morning (7:00 – 9:00 AM)',
+  'Mid-morning (9:00 – 11:00 AM)',
+  'Midday (11:00 AM – 1:00 PM)',
+  'Afternoon (1:00 – 4:00 PM)',
+  'Late afternoon (4:00 – 6:00 PM)',
+  'I’m flexible',
+];
 ---
 
 <Layout
   title={`Schedule a Tour | ${siteInfo.schoolName}`}
-  description="We'd love to show you around Wonder Montessori. Book a free tour and come meet our teachers, see our classrooms, and experience our community."
+  description="Book a tour of Wonder Montessori School in Chicago, IL. Tours take 25–30 minutes, and we highly prefer that parents bring their child along."
 >
 
   <!-- ══════════════════════════════════════════
-       HERO — welcoming, not application-focused
+       HERO
   ══════════════════════════════════════════ -->
-  <section class="bg-cream pt-20 pb-10 px-6 relative overflow-hidden">
+  <section class="bg-cream pt-20 pb-6 px-6 relative overflow-hidden">
     <div class="absolute right-0 top-0 w-[400px] h-[400px] bg-sage/8 rounded-full translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
-    <div class="max-w-7xl mx-auto relative z-10">
+    <div class="max-w-6xl mx-auto relative z-10">
       <div class="section-divider">
         <span class="section-tag" style="margin-bottom:0">No pressure. Just a warm welcome.</span>
       </div>
-      <h1 class="font-serif text-5xl md:text-6xl text-forest leading-tight max-w-2xl mb-4">
+      <h1 class="font-serif text-[2.75rem] sm:text-5xl md:text-6xl text-forest leading-[1.06] max-w-2xl mb-5">
         We'd love to show<br />you <em class="italic text-sage">around</em>
       </h1>
-      <p class="font-sans text-[var(--muted)] text-lg leading-relaxed max-w-lg">
+      <p class="font-sans text-[var(--muted)] text-lg leading-relaxed max-w-xl">
         The best way to experience Wonder Montessori is to visit in person. Meet our
-        teachers, explore our classrooms, and feel what makes our community special.
-        All families are welcome — no strings attached.
+        teachers, see our classrooms, and get a feel for the community your child
+        would be joining.
       </p>
     </div>
   </section>
 
 
   <!-- ══════════════════════════════════════════
-       MAIN CONTENT: Form + School Info
+       FORM + SCHOOL INFO
   ══════════════════════════════════════════ -->
-  <section class="bg-cream py-16 px-6">
-    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-5 gap-10 lg:gap-16 items-start">
+  <section class="bg-cream pt-6 pb-14 px-6">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-5 gap-10 lg:gap-14 items-start">
 
-      <!-- ── FORM (wider) ── -->
+      <!-- ── FORM ── -->
       <div class="lg:col-span-3 reveal">
-        <div class="bg-white rounded-3xl p-8 md:p-10 border border-[rgba(44,62,45,0.07)] relative overflow-hidden">
-          <!-- Gradient top bar -->
-          <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-sage to-terracotta rounded-t-3xl"></div>
+        <div class="bg-white rounded-[2rem] p-8 md:p-10 border border-[rgba(44,62,45,0.07)] relative overflow-hidden">
+          <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-sage to-terracotta"></div>
 
-          <h2 class="font-serif text-2xl text-forest mb-1">Book a free tour</h2>
+          <h2 class="font-serif text-2xl text-forest mb-2">Book a free tour</h2>
           <p class="font-sans text-[var(--muted)] text-sm mb-8 leading-relaxed">
-            Fill out the form below and we'll reach out within one business day to confirm your visit.
+            Tell us a little about your family and we'll be in touch to confirm your visit.
+            Tours last about 25–30 minutes.
           </p>
 
           <!-- Success message -->
           <div id="form-success" class="hidden bg-sage-light border border-sage rounded-2xl p-6 mb-6 text-center">
             <svg class="mx-auto mb-3 text-sage" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-            <p class="font-serif text-lg text-forest">Thank you — we'll be in touch soon.</p>
-            <p class="font-sans text-sm text-[var(--muted)] mt-1">We typically respond within one business day.</p>
+            <p class="font-serif text-lg text-forest">Thank you. We'll be in touch soon.</p>
+            <p class="font-sans text-sm text-[var(--muted)] mt-1.5">
+              If you'd rather speak to someone now, call {siteInfo.phone} and choose extension 3.
+            </p>
           </div>
 
           <form id="tour-form" action={formAction} method="POST" class="flex flex-col gap-5">
-            <!-- Formspree honeypot + subject -->
-            <input type="hidden" name="_subject" value="New Tour Request — Wonder Montessori" />
+            <input type="hidden" name="_subject" value="New Tour Request for Wonder Montessori" />
             <input type="text" name="_gotcha" style="display:none" tabindex="-1" />
 
-            <!-- Row: Name + Child's age -->
+            <!-- Name + child's age -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
-                <label for="parent-name" class="block font-sans text-[0.68rem] font-semibold text-forest uppercase tracking-widest mb-1.5">
+                <label for="parent-name" class="form-label">
                   Parent / Guardian Name <span class="text-terracotta">*</span>
                 </label>
-                <input
-                  type="text" id="parent-name" name="parentName" required
-                  placeholder="e.g. Maria Garcia"
-                  class="form-field"
-                />
+                <input type="text" id="parent-name" name="parentName" required
+                       placeholder="e.g. Maria Garcia" class="form-field" />
               </div>
               <div>
-                <label for="child-age" class="block font-sans text-[0.68rem] font-semibold text-forest uppercase tracking-widest mb-1.5">
+                <label for="child-age" class="form-label">
                   Child's Age <span class="text-terracotta">*</span>
                 </label>
-                <input
-                  type="text" id="child-age" name="childAge" required
-                  placeholder="e.g. 2 years, or 8 months"
-                  class="form-field"
-                />
+                <input type="text" id="child-age" name="childAge" required
+                       placeholder="e.g. 2 years, or 8 months" class="form-field" />
               </div>
             </div>
 
-            <!-- Email -->
-            <div>
-              <label for="email" class="block font-sans text-[0.68rem] font-semibold text-forest uppercase tracking-widest mb-1.5">
-                Email Address <span class="text-terracotta">*</span>
-              </label>
-              <input
-                type="email" id="email" name="email" required
-                placeholder="you@example.com"
-                class="form-field"
-              />
+            <!-- Email + phone -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label for="email" class="form-label">
+                  Email Address <span class="text-terracotta">*</span>
+                </label>
+                <input type="email" id="email" name="email" required
+                       placeholder="you@example.com" class="form-field" />
+              </div>
+              <div>
+                <label for="phone" class="form-label">
+                  Phone Number
+                  <span class="font-normal text-[var(--muted)] normal-case tracking-normal">(optional)</span>
+                </label>
+                <input type="tel" id="phone" name="phone"
+                       placeholder="(773) 000-0000" class="form-field" />
+              </div>
             </div>
 
-            <!-- Phone -->
+            <!-- Program of interest -->
             <div>
-              <label for="phone" class="block font-sans text-[0.68rem] font-semibold text-forest uppercase tracking-widest mb-1.5">
-                Phone Number <span class="font-normal text-[var(--muted)] normal-case tracking-normal">(optional)</span>
-              </label>
-              <input
-                type="tel" id="phone" name="phone"
-                placeholder="(773) 000-0000"
-                class="form-field"
-              />
+              <label for="program" class="form-label">Program of Interest</label>
+              <select id="program" name="program" class="form-field">
+                <option value="">Not sure yet, help me choose</option>
+                <option>Infant &amp; Toddlers (3 – 15 months)</option>
+                <option>Toddler &amp; Two's (15 – 36 months)</option>
+                <option>3–6 Primary (3 – 6 years)</option>
+              </select>
             </div>
 
-            <!-- Preferred date -->
-            <div>
-              <label for="pref-date" class="block font-sans text-[0.68rem] font-semibold text-forest uppercase tracking-widest mb-1.5">
-                Preferred Tour Date &amp; Time
-              </label>
-              <input
-                type="date" id="pref-date" name="preferredDate"
-                class="form-field"
-              />
-              <p class="font-sans text-[var(--muted)] text-xs mt-1.5">
-                We'll confirm a time that works. Weekdays 8:00 AM – 4:00 PM.
+            <!-- Preferred date + preferred tour time -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label for="pref-date" class="form-label">Preferred Tour Date</label>
+                <input type="date" id="pref-date" name="preferredDate" class="form-field" />
+              </div>
+              <div>
+                <label for="pref-time" class="form-label">Preferred Tour Time</label>
+                <select id="pref-time" name="preferredTime" class="form-field">
+                  <option value="">Select a time</option>
+                  {tourTimes.map(t => <option>{t}</option>)}
+                </select>
+              </div>
+            </div>
+
+            <!-- Bring-your-child note -->
+            <div class="flex gap-3 items-start bg-sand rounded-2xl px-5 py-4">
+              <svg class="text-sage flex-shrink-0 mt-0.5" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>
+              </svg>
+              <p class="font-sans text-forest text-sm leading-relaxed">
+                We highly prefer that parents bring their child during the tour.
               </p>
             </div>
 
             <!-- Message -->
             <div>
-              <label for="message" class="block font-sans text-[0.68rem] font-semibold text-forest uppercase tracking-widest mb-1.5">
-                Questions or Comments
-              </label>
-              <textarea
-                id="message" name="message" rows={4}
-                placeholder="Tell us a bit about your child or anything you'd like to know before your visit…"
-                class="form-field resize-none"
-              ></textarea>
+              <label for="message" class="form-label">Questions or Comments</label>
+              <textarea id="message" name="message" rows={4}
+                        placeholder="Tell us a bit about your child or anything you'd like to know before your visit…"
+                        class="form-field resize-none"></textarea>
             </div>
 
-            <!-- Submit -->
             <button type="submit" id="form-submit" class="btn-terracotta w-full justify-center text-base py-4 mt-1">
               Send My Tour Request
             </button>
-
-            <p class="font-sans text-[var(--muted)] text-xs text-center">
-              You can also call us directly at
-              <a href={`tel:${siteInfo.phone}`} class="text-sage hover:underline underline-offset-2">{siteInfo.phone}</a>.
-              We respond within one business day.
-            </p>
           </form>
         </div>
       </div>
 
 
-      <!-- ── SCHOOL INFO (narrower) ── -->
+      <!-- ── SCHOOL INFO ── -->
       <div class="lg:col-span-2 flex flex-col gap-5 reveal reveal-delay-2">
 
         <!-- Contact card -->
-        <div class="bg-forest rounded-3xl p-7 text-white">
-          <h3 class="font-serif text-xl mb-6">Contact Information</h3>
+        <div class="bg-forest rounded-[2rem] p-7 text-white">
+          <h2 class="font-serif text-xl text-white mb-6">Contact Information</h2>
           <div class="flex flex-col gap-5">
 
-            <!-- Address -->
-            <div class="flex gap-3 items-start">
+            <div class="flex gap-3.5 items-start">
               <svg class="text-sage flex-shrink-0 mt-0.5" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
               </svg>
               <div>
-                <p class="font-sans text-[0.6rem] text-white/40 uppercase tracking-widest mb-0.5">Address</p>
-                <a href={`https://maps.google.com/?q=${encodeURIComponent(siteInfo.address)}`} class="font-sans text-sm text-white/75 hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">{siteInfo.address}</a>
+                <p class="font-sans text-[0.6rem] text-white/40 uppercase tracking-[0.14em] mb-1">Address</p>
+                <a href={`https://maps.google.com/?q=${encodeURIComponent(address)}`}
+                   class="font-sans text-sm text-white/75 hover:text-white transition-colors"
+                   target="_blank" rel="noopener noreferrer">
+                  {siteInfo.address}<br />{siteInfo.cityState}
+                </a>
               </div>
             </div>
 
-            <!-- Phone -->
-            <div class="flex gap-3 items-start">
+            <div class="flex gap-3.5 items-start">
               <svg class="text-sage flex-shrink-0 mt-0.5" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 3.5 10.81 19.79 19.79 0 0 1 .46 2.18 2 2 0 0 1 2.44 0h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L6.91 7.91a16 16 0 0 0 6.18 6.18l.77-.77a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
               </svg>
               <div>
-                <p class="font-sans text-[0.6rem] text-white/40 uppercase tracking-widest mb-0.5">Phone</p>
+                <p class="font-sans text-[0.6rem] text-white/40 uppercase tracking-[0.14em] mb-1">Phone</p>
                 <a href={`tel:${siteInfo.phone}`} class="font-sans text-sm text-white/75 hover:text-white transition-colors">{siteInfo.phone}</a>
               </div>
             </div>
 
-            <!-- Email -->
-            <div class="flex gap-3 items-start">
+            <div class="flex gap-3.5 items-start">
+              <svg class="text-sage flex-shrink-0 mt-0.5" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+                <path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/>
+              </svg>
+              <div>
+                <p class="font-sans text-[0.6rem] text-white/40 uppercase tracking-[0.14em] mb-1">Fax</p>
+                <p class="font-sans text-sm text-white/75">{siteInfo.fax}</p>
+              </div>
+            </div>
+
+            <div class="flex gap-3.5 items-start">
               <svg class="text-sage flex-shrink-0 mt-0.5" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
                 <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/>
               </svg>
               <div>
-                <p class="font-sans text-[0.6rem] text-white/40 uppercase tracking-widest mb-0.5">Email</p>
+                <p class="font-sans text-[0.6rem] text-white/40 uppercase tracking-[0.14em] mb-1">Email</p>
                 <a href={`mailto:${siteInfo.email}`} class="font-sans text-sm text-white/75 hover:text-white transition-colors">{siteInfo.email}</a>
               </div>
             </div>
 
-            <!-- Hours -->
-            <div class="flex gap-3 items-start">
+            <div class="flex gap-3.5 items-start">
               <svg class="text-sage flex-shrink-0 mt-0.5" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
                 <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
               </svg>
               <div>
-                <p class="font-sans text-[0.6rem] text-white/40 uppercase tracking-widest mb-0.5">Hours</p>
+                <p class="font-sans text-[0.6rem] text-white/40 uppercase tracking-[0.14em] mb-1">Hours</p>
                 <p class="font-sans text-sm text-white/75">{siteInfo.hours}</p>
               </div>
             </div>
-
           </div>
         </div>
 
         <!-- What to expect -->
-        <div class="bg-sand rounded-3xl p-7">
-          <h3 class="font-serif text-lg text-forest mb-5">What to expect on your tour</h3>
-          <div class="flex flex-col gap-4">
+        <div class="bg-sand rounded-[2rem] p-7">
+          <h2 class="font-serif text-lg text-forest mb-5">What to expect on your tour</h2>
+          <ol class="flex flex-col gap-4">
             {[
               'Meet our teachers and observe active Montessori classrooms',
-              'Learn about our curriculum and the authentic Montessori method',
-              'Ask any questions — there are truly no wrong ones',
-              "Discuss which program is the right fit for your child's age and needs",
+              'Learn about our curriculum and how a Montessori day is structured',
+              'Ask any questions. There are truly no wrong ones',
+              "Talk through which program fits your child's age and your schedule",
             ].map((step, i) => (
-              <div class="flex gap-3 items-start">
-                <div class="w-5 h-5 bg-forest text-white rounded-full flex items-center justify-center font-sans text-[0.65rem] font-bold flex-shrink-0 mt-0.5">{i + 1}</div>
+              <li class="flex gap-3.5 items-start">
+                <span class="w-5 h-5 bg-forest text-white rounded-full flex items-center justify-center font-sans text-[0.65rem] font-bold flex-shrink-0 mt-0.5">{i + 1}</span>
                 <p class="font-sans text-[var(--muted)] text-sm leading-relaxed">{step}</p>
-              </div>
+              </li>
             ))}
-          </div>
-        </div>
-
-        <!-- Quick FAQ -->
-        <div class="bg-white rounded-2xl p-6 border border-[rgba(44,62,45,0.07)]">
-          <h3 class="font-serif text-base text-forest mb-4">Quick answers</h3>
-          <div class="flex flex-col gap-4">
-            {[
-              { q: 'Do I need to bring my child?', a: 'Not required, though children are always welcome to explore alongside you.' },
-              { q: 'How long does a tour take?', a: 'Typically 45–60 minutes, depending on your questions.' },
-              { q: 'Is there a fee to tour?', a: 'No — touring is completely free and with no obligation.' },
-            ].map(faq => (
-              <div>
-                <p class="font-sans text-sm font-medium text-forest mb-0.5">{faq.q}</p>
-                <p class="font-sans text-xs text-[var(--muted)] leading-relaxed">{faq.a}</p>
-              </div>
-            ))}
-          </div>
+          </ol>
         </div>
       </div>
     </div>
@@ -251,25 +256,42 @@ const formAction = `https://formspree.io/f/${siteInfo.formspreeId}`;
 
 
   <!-- ══════════════════════════════════════════
-       MAP PLACEHOLDER
+       MONTESSORI QUOTE
   ══════════════════════════════════════════ -->
-  <section class="bg-white py-16 px-6">
+  <section class="bg-sage py-20 px-6">
+    <figure class="max-w-3xl mx-auto text-center reveal">
+      <div class="w-10 h-px bg-white/50 mx-auto mb-8"></div>
+      <blockquote class="font-serif italic text-2xl md:text-[1.9rem] text-white leading-[1.45]">
+        “{quote.text}”
+      </blockquote>
+      <figcaption class="font-sans text-white/65 text-xs uppercase tracking-[0.18em] mt-7">
+        {quote.attribution}
+      </figcaption>
+    </figure>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       MAP
+  ══════════════════════════════════════════ -->
+  <section class="bg-white py-20 px-6">
     <div class="max-w-5xl mx-auto reveal">
-      <h2 class="font-serif text-2xl text-forest mb-5 text-center">Find us on Chicago's north side</h2>
-      <div class="bg-sand rounded-3xl h-72 flex items-center justify-center overflow-hidden relative">
-        <!-- Swap with a real Google Maps embed iframe if desired -->
-        <div class="text-center px-6">
-          <svg class="mx-auto mb-3 text-sage" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          <p class="font-serif text-forest text-lg mb-3">{siteInfo.address}</p>
-          <a
-            href={`https://maps.google.com/?q=${encodeURIComponent(siteInfo.address)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn-outline"
-          >
-            Open in Google Maps
-          </a>
-        </div>
+      <h2 class="font-serif text-2xl md:text-3xl text-forest mb-6 text-center">Find us on Chicago's north side</h2>
+      <div class="rounded-[2rem] overflow-hidden border border-[rgba(44,62,45,0.08)]">
+        <iframe
+          title={`Map showing ${siteInfo.schoolName} at ${address}`}
+          src={`https://maps.google.com/maps?q=${encodeURIComponent(address)}&output=embed`}
+          width="100%" height="380" style="border:0; display:block;"
+          loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+        ></iframe>
+      </div>
+      <div class="text-center mt-6">
+        <p class="font-serif text-forest text-lg mb-4">{address}</p>
+        <a href={`https://maps.google.com/?q=${encodeURIComponent(address)}`}
+           target="_blank" rel="noopener noreferrer" class="btn-outline">
+          Open in Google Maps
+        </a>
       </div>
     </div>
   </section>
@@ -281,6 +303,11 @@ const formAction = `https://formspree.io/f/${siteInfo.formspreeId}`;
   const form = /** @type {HTMLFormElement|null} */ (document.getElementById('tour-form'));
   const success = document.getElementById('form-success');
   const submitBtn = /** @type {HTMLButtonElement|null} */ (document.getElementById('form-submit'));
+
+  // A tour can only be booked for a future date. Set at runtime, not build time,
+  // so the limit stays correct however long the page has been deployed.
+  const prefDate = /** @type {HTMLInputElement|null} */ (document.getElementById('pref-date'));
+  if (prefDate) prefDate.min = new Date().toLocaleDateString('en-CA');
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -297,13 +324,13 @@ const formAction = `https://formspree.io/f/${siteInfo.formspreeId}`;
       if (res.ok) {
         form.style.display = 'none';
         success?.classList.remove('hidden');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        success?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       } else {
-        submitBtn.textContent = 'Something went wrong — please call us.';
+        submitBtn.textContent = 'Something went wrong, please call us.';
         submitBtn.disabled = false;
       }
     } catch {
-      submitBtn.textContent = 'Error — please try again.';
+      submitBtn.textContent = 'Error, please try again.';
       submitBtn.disabled = false;
     }
   });

@@ -1,13 +1,36 @@
 {
+  "_comment": "Verified against the WMS Parent Handbook (Rev. 08/24). Mirrors FALLBACK.siteInfo in src/lib/queries.ts — keep the two in sync.",
   "schoolName": "Wonder Montessori",
+  "legalName": "Wonder Montessori School",
   "tagline": "A place where every child belongs",
-  "address": "5644 North Pulaski Road, Chicago, IL 60646",
+  "address": "5622–5644 North Pulaski Road",
+  "cityState": "Chicago, IL 60646",
+  "locations": [
+    { "label": "Infant & Toddlers", "street": "5634 N. Pulaski Road" },
+    { "label": "Toddler & Two's", "street": "5624–5636 N. Pulaski Road" },
+    { "label": "3–6 Primary", "street": "5644 N. Pulaski Road" }
+  ],
   "phone": "(773) 509-1296",
+  "fax": "773-337-6337",
+  "extensions": [
+    { "ext": "1", "label": "3–6 Primary program" },
+    { "ext": "2", "label": "Infant & Toddlers · Toddler & Two's" },
+    { "ext": "3", "label": "Schedule a tour · Emergency line" }
+  ],
   "email": "info@wondermontessori.org",
   "hours": "Monday – Friday, 7:00 AM – 6:00 PM",
   "established": "1993",
   "formspreeId": "YOUR_FORMSPREE_ID",
+  "calendarId": "wondermontessori60646@gmail.com",
+  "timezone": "America/Chicago",
+  "nonprofit": "501(c)(3)",
+  "sectarian": false,
+  "memberships": [
+    "American Montessori Society",
+    "Association of Illinois Montessori Schools"
+  ],
   "socialLinks": {
+    "_comment": "The Parent Handbook states the school does not participate in social media. Leave empty.",
     "facebook": "",
     "instagram": ""
   }
