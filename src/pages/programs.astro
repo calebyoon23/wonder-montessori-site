@@ -1,23 +1,27 @@
 ---
 /**
  * programs.astro — Programs, Curriculum & Tuition
- * Three programs only. Every tuition figure comes from the 2026–2027 Tuition Plans
- * document via queries.ts — do not hardcode prices in this file.
+ * Three programs only. Every tuition figure comes from src/lib/pricing.ts, which
+ * reads Sanity first and content/pricing.json second — never hardcode a price here.
  */
 import Layout from '../layouts/Layout.astro';
-import { fetchSanity } from '../lib/sanity';
-import { Q, FALLBACK } from '../lib/queries';
+import { SITE as siteInfo } from '../lib/site';
+import { getTuition, NOTE_FIELDS } from '../lib/pricing';
 import { QUOTES, CURRICULUM_AREAS } from '../lib/content';
 import { PROGRAM_PHOTOS } from '../lib/images';
 
-const siteInfo = await fetchSanity(Q.siteInfo, FALLBACK.siteInfo);
-const programs = await fetchSanity(Q.programs, FALLBACK.programs);
-const quote    = QUOTES.programs;
+const { academicYear, programs, notes } = await getTuition();
+const quote = QUOTES.programs;
+
+/** Footnotes with text. A note cleared in the Studio drops out of the list. */
+const shownNotes = NOTE_FIELDS
+  .map(({ key, label }) => ({ label, body: notes[key] }))
+  .filter(n => n.body);
 ---
 
 <Layout
   title={`Programs & Tuition | ${siteInfo.schoolName}`}
-  description="Wonder Montessori's three programs in Chicago, IL: Infant & Toddlers (3–15 months), Toddler & Two's (15–36 months), and 3–6 Primary, with 2026–2027 tuition."
+  description={`Wonder Montessori's three programs in Chicago, IL: Infant & Toddlers (3–15+ months), Toddler & Two's (15–36+ months), and 3–6 Primary, with ${academicYear} tuition.`}
 >
 
   <!-- ══════════════════════════════════════════
@@ -85,11 +89,11 @@ const quote    = QUOTES.programs;
                 <div class="bg-white rounded-3xl border border-[rgba(44,62,45,0.08)] overflow-hidden">
                   <div class="flex items-baseline justify-between gap-4 px-6 py-4 border-b border-[rgba(44,62,45,0.08)] bg-sand/40">
                     <h3 class="font-serif text-base text-forest">Schedules &amp; Monthly Tuition</h3>
-                    <span class="font-sans text-[var(--muted)] text-[0.65rem] uppercase tracking-[0.12em]">2026–2027</span>
+                    <span class="font-sans text-[var(--muted)] text-[0.65rem] uppercase tracking-[0.12em]">{academicYear}</span>
                   </div>
 
                   <table class="w-full">
-                    <caption class="sr-only">{prog.name} schedule options and monthly tuition for 2026–2027</caption>
+                    <caption class="sr-only">{prog.name} schedule options and monthly tuition for {academicYear}</caption>
                     <thead class="sr-only">
                       <tr><th scope="col">Schedule</th><th scope="col">Hours</th><th scope="col">Monthly tuition</th></tr>
                     </thead>
@@ -114,6 +118,25 @@ const quote    = QUOTES.programs;
           </article>
         );
       })}
+
+      <!-- Discounts & fees — applies across all three programs -->
+      {shownNotes.length > 0 && (
+        <aside class="reveal bg-white rounded-3xl border border-[rgba(44,62,45,0.08)] overflow-hidden">
+          <div class="px-6 md:px-8 py-4 border-b border-[rgba(44,62,45,0.08)] bg-sand/40">
+            <h2 class="font-serif text-base text-forest">Discounts &amp; Fees</h2>
+          </div>
+          <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6 px-6 md:px-8 py-7">
+            {shownNotes.map(note => (
+              <div>
+                <dt class="font-sans text-sage text-[0.66rem] font-semibold uppercase tracking-[0.14em] mb-1.5">
+                  {note.label}
+                </dt>
+                <dd class="font-sans text-[var(--muted)] text-sm leading-relaxed">{note.body}</dd>
+              </div>
+            ))}
+          </dl>
+        </aside>
+      )}
     </div>
   </section>
 
@@ -180,7 +203,6 @@ const quote    = QUOTES.programs;
       </p>
       <div class="flex flex-wrap gap-4 justify-center">
         <a href="/contact" class="btn-white">Schedule a Tour</a>
-        <a href={`tel:${siteInfo.phone}`} class="btn-outline-white">{siteInfo.phone}</a>
       </div>
     </div>
   </section>

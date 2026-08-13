@@ -5,13 +5,12 @@
  * Facts sourced from the Parent Handbook and 2026–2027 Tuition Plans. No emojis.
  */
 import Layout from '../layouts/Layout.astro';
-import { fetchSanity } from '../lib/sanity';
-import { Q, FALLBACK, fullAddress, lowestPrice } from '../lib/queries';
+import { SITE as siteInfo, fullAddress } from '../lib/site';
+import { getTuition, lowestPrice } from '../lib/pricing';
 import { QUOTES, CREDENTIALS } from '../lib/content';
 import { PHOTOS, PROGRAM_PHOTOS, photo } from '../lib/images';
 
-const siteInfo = await fetchSanity(Q.siteInfo, FALLBACK.siteInfo);
-const programs = await fetchSanity(Q.programs, FALLBACK.programs);
+const { programs } = await getTuition();
 
 const heroPhoto  = photo(PHOTOS.homeHero);
 const quote      = QUOTES.home;

@@ -1,7 +1,11 @@
 dist/
 node_modules/
 studio/node_modules/
+studio/dist/
+studio/.sanity/
+studio/.env
 .env
 .env.local
 .DS_Store
 .astro/
+.gstack/

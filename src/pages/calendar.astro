@@ -6,10 +6,7 @@
  * touching this site. The calendar ID lives in siteInfo (content/site-info.json).
  */
 import Layout from '../layouts/Layout.astro';
-import { fetchSanity } from '../lib/sanity';
-import { Q, FALLBACK } from '../lib/queries';
-
-const siteInfo = await fetchSanity(Q.siteInfo, FALLBACK.siteInfo);
+import { SITE as siteInfo } from '../lib/site';
 
 // Google Calendar embed. Colors are set to the school palette; `showTabs` lets
 // visitors switch between month, week, and agenda views.

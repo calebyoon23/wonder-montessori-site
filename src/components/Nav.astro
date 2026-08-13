@@ -3,10 +3,7 @@
  * Nav.astro — Responsive sticky navigation
  * No emojis. Clean underline hover animation. Mobile hamburger.
  */
-import { fetchSanity } from '../lib/sanity';
-import { Q, FALLBACK } from '../lib/queries';
-
-const siteInfo = await fetchSanity(Q.siteInfo, FALLBACK.siteInfo);
+import { SITE as siteInfo } from '../lib/site';
 
 const navLinks = [
   { href: '/',         label: 'Home' },

@@ -1,6 +1,14 @@
 # Setting Up Sanity CMS
 
-This guide walks you through connecting your Sanity Studio to the Wonder Montessori website so content is editable through a visual dashboard.
+This guide connects Sanity Studio to the Wonder Montessori website.
+
+**Scope, on purpose:** Sanity controls **tuition and nothing else**. The Studio has one
+schema, one document, and no way to create or delete documents. Everything else on the
+site — school details, program names, staff, photos, copy — lives in the repo and changes
+through a commit. See "How the content is split" at the bottom.
+
+If Sanity is never configured, or the API is down at build time, the site builds from
+`content/pricing.json` instead. It cannot break the site.
 
 ---
 
@@ -15,67 +23,74 @@ This guide walks you through connecting your Sanity Studio to the Wonder Montess
 
 ---
 
-## Step 2 — Add your credentials
+## Step 2 — Point the website at the project
 
 1. In this project folder, copy `.env.example` to `.env`:
    ```bash
    cp .env.example .env
    ```
-2. Open `.env` and fill in:
+2. Fill in your real project id:
    ```
-   SANITY_PROJECT_ID=abc123de    ← your real Project ID
+   SANITY_PROJECT_ID=abc123de
    SANITY_DATASET=production
    ```
-3. Open `studio/sanity.config.ts` and replace `YOUR_PROJECT_ID` with the same ID.
 
 ---
 
-## Step 3 — Set up the Studio
+## Step 3 — Point the Studio at the project
+
+The Studio reads its project id from its own environment file:
 
 ```bash
 cd studio
+echo "SANITY_STUDIO_PROJECT_ID=abc123de" > .env
 npm install
 npm run dev
 ```
 
-Visit **http://localhost:3333** in your browser. You'll see the Sanity Studio — log in with your Sanity account.
+Visit **http://localhost:3333** and log in with your Sanity account.
 
 ---
 
-## Step 4 — Add your content
+## Step 4 — Create the tuition document
 
-In the Studio:
+The Studio sidebar shows exactly one item: **Tuition & Pricing**. Open it. It opens
+pre-filled with the current prices (seeded from `studio/schemas/tuition.ts`), so all you
+have to do is click **Publish** once. That creates the singleton document with the fixed
+id `tuition`, which is what the site queries.
 
-1. **School Information** — Add your school name, address, phone, email, and Formspree ID
-2. **Programs & Pricing** — Add each program with pricing, age range, and description
-3. **Events & Calendar** — Add upcoming events
-4. **Staff & Team** — Add staff bios and headshot photos
+From this point on, the Studio is the live source of truth for prices, and
+`content/pricing.json` is only the offline fallback. The two are expected to diverge.
 
 ---
 
-## Step 5 — Deploy the Studio (so the owner can use it from anywhere)
+## Step 5 — Deploy the Studio (so the admin can use it from anywhere)
 
 ```bash
 cd studio
 npm run deploy
 ```
 
-You'll be prompted to choose a hostname. Use something like `wonder-montessori`. The Studio will be available at:
+Choose a hostname such as `wonder-montessori`. The Studio will live at:
 ```
 https://wonder-montessori.sanity.studio
 ```
 
-**Invite the owner:**
-1. In the Studio, go to **Manage → Members**
-2. Click **Invite** and enter the owner's email
+**Invite the admin:**
+1. Go to [sanity.io/manage](https://sanity.io/manage) → your project → **Members**
+2. Click **Invite** and enter their email
 3. Set role to **Editor**
-4. She'll receive an email, set a password, and log in at the studio URL — no technical knowledge required
+4. They set a password and log in at the Studio URL — no technical knowledge required
+
+An Editor can only ever reach the tuition document: the Studio exposes no other schema
+type, the "new document" menu is empty, and create/delete/duplicate/unpublish actions are
+removed in `studio/sanity.config.ts`.
 
 ---
 
 ## Step 6 — Connect to Cloudflare Pages
 
-### Build settings in Cloudflare Pages:
+### Build settings
 | Setting | Value |
 |---|---|
 | Framework | Astro |
@@ -83,21 +98,20 @@ https://wonder-montessori.sanity.studio
 | Build output | `dist/` |
 | Root directory | `/` (root of repo) |
 
-### Environment variables in Cloudflare Pages:
+### Environment variables
 Go to **Settings → Environment variables** and add:
 ```
 SANITY_PROJECT_ID = your_project_id
 SANITY_DATASET    = production
 ```
 
-### Auto-rebuild when content changes (Sanity webhook):
+### Auto-rebuild when prices change (Sanity webhook)
 1. In Cloudflare Pages → **Settings → Builds & deployments → Deploy hooks**
 2. Create a hook named `Sanity Content Update` — copy the webhook URL
-3. In **sanity.io/manage → your project → API → Webhooks**
-4. Create a new webhook, paste the Cloudflare URL
-5. Set trigger: `create`, `update`, `delete` on all document types
+3. In **sanity.io/manage → your project → API → Webhooks**, create a webhook and paste that URL
+4. Trigger on `create`, `update`, `delete` for the `tuition` type
 
-Now when the owner publishes a change in Sanity, the site automatically rebuilds within ~1 minute.
+Publishing a price change now rebuilds the site within about a minute.
 
 ---
 
@@ -106,8 +120,46 @@ Now when the owner publishes a change in Sanity, the site automatically rebuilds
 1. Go to [formspree.io](https://formspree.io) and create a free account
 2. Click **New Form** → name it `Wonder Montessori Tour Request`
 3. Copy the **Form ID** (looks like `xrgjabnq`)
-4. In Sanity Studio → **School Information** → paste the Form ID in the `Formspree Form ID` field
-5. Publish the change — the contact form will now send email notifications to your address
+4. Paste it into `content/site-info.json` as `formspreeId`, then commit and deploy
+
+---
+
+## How the content is split
+
+| Layer | Lives in | Changed by |
+|---|---|---|
+| Tuition (prices, schedules, academic year, discounts & fees) | Sanity `tuition` singleton, falling back to `content/pricing.json` | **The admin, in the Studio** |
+| School details (name, address, phone, hours, calendar id, Formspree id) | `content/site-info.json` | Developer |
+| Program identity (name, age range, meal policy) | `src/lib/site.ts` | Developer |
+| Founder bios | `src/lib/site.ts` | Developer |
+| Curriculum, credentials, quotations | `src/lib/content.ts` | Developer |
+| Photographs | `src/lib/images.ts` + `public/images/` | Developer |
+| Calendar events | Google Calendar | School staff, directly |
+
+### Adding or renaming a program
+
+Program identity is code. To change one:
+
+1. Edit `PROGRAMS` in `src/lib/site.ts` (slug, name, age range)
+2. Add the matching slug to `PROGRAM_PHOTOS` in `src/lib/images.ts`
+3. Add a fallback price block for the slug in `content/pricing.json`
+4. Add the slug to `PROGRAM_SLUGS` and to `initialValue` in `studio/schemas/tuition.ts`
+5. In the Studio, add a block for the new program under **Tuition by Program**
+
+The slug is the join key across all five. A Sanity block whose slug matches nothing in
+`PROGRAMS` is ignored; a program with no Sanity block falls back to `content/pricing.json`.
+
+### Fallback rules, and why prices and notes differ
+
+Prices and footnotes deliberately fall back differently, in `mergeTuition()`:
+
+- **Plans** fall back per program. An empty or malformed Studio entry never blanks a
+  tuition table, because a program showing no prices is a broken page.
+- **Notes** are owned outright by the Studio once the document has a `notes` object.
+  Clearing a note there hides it, rather than resurrecting the checked-in text — a missing
+  footnote is not a broken page, and an admin who deletes a note means it.
+
+`content/pricing.json` supplies the notes only when Sanity has none at all.
 
 ---
 
@@ -115,9 +167,8 @@ Now when the owner publishes a change in Sanity, the site automatically rebuilds
 
 | What | Where |
 |---|---|
-| Edit school info | Studio → School Information |
-| Update pricing | Studio → Programs & Pricing |
-| Add/remove events | Studio → Events & Calendar |
-| Update staff bios | Studio → Staff & Team |
+| Update prices | Studio → Tuition & Pricing |
 | Studio URL | https://wonder-montessori.sanity.studio |
-| Owner guide | `HOW_TO_UPDATE.md` |
+| Admin guide | `HOW_TO_UPDATE.md` |
+| Price fallback | `content/pricing.json` |
+| Site query + merge logic | `src/lib/pricing.ts` |

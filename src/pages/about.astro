@@ -8,11 +8,7 @@
  *   cream (hero) → white (founders) → sand (mission) → forest (footer)
  */
 import Layout from '../layouts/Layout.astro';
-import { fetchSanity, sanityImageUrl } from '../lib/sanity';
-import { Q, FALLBACK } from '../lib/queries';
-
-const siteInfo = await fetchSanity(Q.siteInfo, FALLBACK.siteInfo);
-const staff    = await fetchSanity(Q.staff, FALLBACK.staff);
+import { SITE as siteInfo, FOUNDERS } from '../lib/site';
 
 /** "Dr. Gwen Ku" -> "GK". Honorifics are dropped so the monogram reads cleanly. */
 const initials = (name: string) =>
@@ -87,18 +83,14 @@ const pillars = [
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-        {staff.map((member, i) => (
+        {FOUNDERS.map((member, i) => (
           <article class={`reveal reveal-delay-${i} card-hover bg-cream rounded-[1.75rem] p-8 border border-[rgba(44,62,45,0.08)] relative overflow-hidden`}>
             <!-- Top accent -->
             <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-sage to-terracotta"></div>
 
-            <!-- Monogram, or a real headshot once one is uploaded -->
+            <!-- Monogram -->
             <div class="w-16 h-16 rounded-full bg-sage-light border border-sage/30 flex items-center justify-center mb-6 overflow-hidden">
-              {sanityImageUrl(member.photo) ? (
-                <img src={sanityImageUrl(member.photo)} alt={member.name} class="w-full h-full object-cover" />
-              ) : (
-                <span class="font-serif text-forest text-lg font-bold tracking-wide">{initials(member.name)}</span>
-              )}
+              <span class="font-serif text-forest text-lg font-bold tracking-wide">{initials(member.name)}</span>
             </div>
 
             <h3 class="font-serif text-2xl text-forest mb-1.5 leading-tight">{member.name}</h3>

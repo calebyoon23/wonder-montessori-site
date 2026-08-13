@@ -1,5 +1,5 @@
 {
-  "_comment": "Verified against the WMS Parent Handbook (Rev. 08/24). Mirrors FALLBACK.siteInfo in src/lib/queries.ts — keep the two in sync.",
+  "_comment": "Verified against the WMS Parent Handbook (Rev. 08/24). The single source of these facts — read directly by src/lib/site.ts. Not editable through Sanity; only tuition is.",
   "schoolName": "Wonder Montessori",
   "legalName": "Wonder Montessori School",
   "tagline": "A place where every child belongs",

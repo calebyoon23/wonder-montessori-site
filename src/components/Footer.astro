@@ -1,12 +1,9 @@
 ---
 /**
- * Footer.astro — Site footer. No emojis. School info from Sanity.
+ * Footer.astro — Site footer. No emojis. School info from content/site-info.json.
  */
-import { fetchSanity } from '../lib/sanity';
-import { Q, FALLBACK, fullAddress } from '../lib/queries';
+import { SITE as siteInfo, fullAddress, PROGRAMS as programs } from '../lib/site';
 
-const siteInfo = await fetchSanity(Q.siteInfo, FALLBACK.siteInfo);
-const programs = await fetchSanity(Q.programs, FALLBACK.programs);
 const year = new Date().getFullYear();
 ---
 

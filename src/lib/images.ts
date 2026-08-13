@@ -29,7 +29,7 @@ export const PHOTOS = {
 
 } satisfies Record<string, Photo>;
 
-/** Per-program photography, keyed by the program slug in queries.ts. */
+/** Per-program photography, keyed by the program slug in site.ts. */
 export const PROGRAM_PHOTOS: Record<string, Photo> = {
   'infant-toddlers': {
     src: '/images/infant.jpg',

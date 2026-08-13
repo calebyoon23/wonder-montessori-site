@@ -1,16 +1,14 @@
 /**
  * studio/schemas/index.ts
- * Exports all schema types for Sanity Studio.
+ * The Studio has exactly one schema on purpose.
  *
- * Note: there is no Event schema. The Calendar page embeds the school's Google
- * Calendar directly, so events are managed in Google Calendar, not here.
+ * Tuition is the only thing an admin can change. School details, staff, program
+ * names, photos, and page copy are code, edited through a pull request — see
+ * src/lib/site.ts, src/lib/content.ts, and content/site-info.json.
+ *
+ * Calendar events are not here either: the Calendar page embeds the school's
+ * Google Calendar, so events are managed in Google Calendar.
  */
-import { siteInfoSchema } from './siteInfo';
-import { programSchema }  from './program';
-import { staffSchema }    from './staff';
+import { tuitionSchema } from './tuition';
 
-export const schemaTypes = [
-  siteInfoSchema,
-  programSchema,
-  staffSchema,
-];
+export const schemaTypes = [tuitionSchema];

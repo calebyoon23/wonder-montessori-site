@@ -1,34 +1,27 @@
 {
-  "_comment": "Tuition figures are verbatim from 'WMS 2026-2027 Tuition Plans'. Mirrors FALLBACK.programs in src/lib/queries.ts — keep the two in sync.",
+  "_comment": "PRICING ONLY. This is the tuition data the site falls back to when Sanity is not configured or unreachable. When Sanity is connected, the Tuition & Pricing document in the Studio overrides everything here. Program names, age ranges, and photos are NOT editable content — they live in src/lib/site.ts.",
+  "_source": "WMS Tuition Plans, Academic Year 2026-2027",
   "academicYear": "2026–2027",
   "programs": [
     {
       "slug": "infant-toddlers",
-      "name": "Infant & Toddlers",
-      "ageRange": "3 months – 15 months",
       "plans": [
         { "label": "5 Full Days", "hours": "7:00 AM – 6:00 PM", "price": "$2,230" },
         { "label": "4 Full Days", "hours": "7:00 AM – 6:00 PM", "price": "$2,155" },
         { "label": "3 Full Days", "hours": "7:00 AM – 6:00 PM", "price": "$2,085" }
-      ],
-      "mealNote": "Families provide food, milk, or formula for infants. Once a child reaches 15 months and is eating solid foods, a catered organic lunch is served with parental approval."
+      ]
     },
     {
       "slug": "toddler-twos",
-      "name": "Toddler & Two's",
-      "ageRange": "15 months – 36 months",
       "plans": [
         { "label": "5 Full Days", "hours": "7:00 AM – 6:00 PM", "price": "$2,000" },
         { "label": "4 Full Days", "hours": "7:00 AM – 6:00 PM", "price": "$1,945" },
         { "label": "3 Full Days", "hours": "7:00 AM – 6:00 PM", "price": "$1,845" },
         { "label": "5 Half Days", "hours": "8:30 AM – 12:00 PM", "price": "$1,620" }
-      ],
-      "mealNote": "All schedules include catered organic lunches and snacks."
+      ]
     },
     {
       "slug": "primary",
-      "name": "3–6 Primary",
-      "ageRange": "3 – 6 years",
       "plans": [
         { "label": "5 Full Days", "hours": "7:00 AM – 6:00 PM", "price": "$1,640" },
         { "label": "4 Full Days", "hours": "7:00 AM – 6:00 PM", "price": "$1,585" },
@@ -36,8 +29,7 @@
         { "label": "5 Extended Half Days", "hours": "8:30 AM – 2:30 PM", "price": "$1,510" },
         { "label": "3 Extended Half Days", "hours": "8:30 AM – 2:30 PM", "price": "$1,420" },
         { "label": "5 Half Days", "hours": "8:30 AM – 12:00 PM", "price": "$1,400" }
-      ],
-      "mealNote": "All schedules include catered organic lunches and snacks. Children must be fully potty-trained for this program."
+      ]
     }
   ],
   "notes": {
