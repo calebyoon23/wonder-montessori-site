@@ -9,6 +9,10 @@
  *
  * Program names, age ranges, and photos are deliberately NOT part of this — an
  * admin editing tuition cannot change them. They live in src/lib/site.ts.
+ *
+ * The tuition tables are the whole of it: no footnotes, discounts, or fee copy
+ * are rendered on the site. content/pricing.json still records those policies for
+ * reference, but nothing reads them.
  */
 import pricingJson from '../../content/pricing.json';
 import { fetchSanity } from './sanity';
@@ -30,33 +34,10 @@ export interface PricedProgram extends ProgramInfo {
   plans: TuitionPlan[];
 }
 
-/**
- * Discount and fee footnotes shown beneath the tuition tables. These are part of
- * the price of attending, so they are editable alongside the figures themselves.
- * Any note left blank is simply not rendered.
- */
-export interface TuitionNotes {
-  annualDiscount: string;
-  siblingDiscount: string;
-  earlyDropOff: string;
-  proration: string;
-  registrationFees: string;
-}
-
-/** Display order and headings for the footnotes. Headings are design, not content. */
-export const NOTE_FIELDS: Array<{ key: keyof TuitionNotes; label: string }> = [
-  { key: 'annualDiscount',   label: 'Paying annually' },
-  { key: 'siblingDiscount',  label: 'Siblings' },
-  { key: 'earlyDropOff',     label: 'Early drop-off' },
-  { key: 'proration',        label: 'Proration' },
-  { key: 'registrationFees', label: 'Registration fees' },
-];
-
 export interface Tuition {
   /** e.g. "2026–2027". Shown above every tuition table. */
   academicYear: string;
   programs: PricedProgram[];
-  notes: TuitionNotes;
 }
 
 // ─── Sanity ──────────────────────────────────────────────────────────────────
@@ -64,8 +45,7 @@ export interface Tuition {
 /** The tuition singleton. Its document id is fixed as `tuition` in the Studio. */
 export const TUITION_QUERY = `*[_type == "tuition"][0]{
   academicYear,
-  programs[]{ slug, plans[]{ label, hours, price } },
-  notes{ annualDiscount, siblingDiscount, earlyDropOff, proration, registrationFees }
+  programs[]{ slug, plans[]{ label, hours, price } }
 }`;
 
 /** Shape returned by Sanity. Everything is optional — the Studio may be empty. */
@@ -78,7 +58,6 @@ export interface RemotePlan {
 export interface RemoteTuition {
   academicYear?: string;
   programs?: Array<{ slug?: string; plans?: RemotePlan[] }>;
-  notes?: Partial<Record<keyof TuitionNotes, string>>;
 }
 
 // ─── Fallback ────────────────────────────────────────────────────────────────
@@ -86,8 +65,6 @@ export interface RemoteTuition {
 const FALLBACK_PLANS: Record<string, TuitionPlan[]> = Object.fromEntries(
   pricingJson.programs.map(p => [p.slug, p.plans]),
 );
-
-const FALLBACK_NOTES: TuitionNotes = pricingJson.notes;
 
 // ─── Resolution ──────────────────────────────────────────────────────────────
 
@@ -115,20 +92,9 @@ export function mergeTuition(remote: RemoteTuition | null): Tuition {
     };
   });
 
-  // Notes follow a different rule from plans, on purpose. A blank tuition table
-  // is a broken page, so plans always fall back. A missing footnote is not — so
-  // once the Studio document has notes, it owns them outright and clearing one
-  // in the Studio hides it, rather than resurrecting the checked-in text.
-  const notes = (remote?.notes
-    ? Object.fromEntries(
-        NOTE_FIELDS.map(({ key }) => [key, remote.notes?.[key]?.trim() ?? '']),
-      )
-    : { ...FALLBACK_NOTES }) as TuitionNotes;
-
   return {
     academicYear: remote?.academicYear?.trim() || pricingJson.academicYear,
     programs,
-    notes,
   };
 }
 

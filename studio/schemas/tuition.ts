@@ -102,39 +102,6 @@ export const tuitionSchema = defineType({
       })],
     }),
 
-    defineField({
-      name: 'notes',
-      title: 'Discounts & Fees',
-      type: 'object',
-      description:
-        'Shown as footnotes underneath the tuition tables on the Programs page. ' +
-        'Leave a field empty to hide that note from the site entirely.',
-      options: { collapsible: true, collapsed: false },
-      fields: [
-        defineField({
-          name: 'annualDiscount', title: 'Paying annually', type: 'text', rows: 2,
-          description: 'e.g. Paying annually represents a 5% discount off monthly tuition.',
-        }),
-        defineField({
-          name: 'siblingDiscount', title: 'Siblings', type: 'text', rows: 2,
-          description: 'e.g. 10% discount applied to the tuition of the child with the lower rate.',
-        }),
-        defineField({
-          name: 'earlyDropOff', title: 'Early drop-off', type: 'text', rows: 2,
-          description: 'The additional fee, and which schedules it applies to.',
-        }),
-        defineField({
-          name: 'proration', title: 'Proration', type: 'text', rows: 2,
-          description: 'Whether tuition is prorated for absences or closing days.',
-        }),
-        defineField({
-          name: 'registrationFees', title: 'Registration fees', type: 'text', rows: 3,
-          description:
-            'Application fee, family fee, and security deposit. If the amounts are now ' +
-            'public, put them here — families ask about this constantly.',
-        }),
-      ],
-    }),
   ],
 
   preview: {
@@ -178,18 +145,5 @@ export const tuitionSchema = defineType({
         ],
       },
     ],
-    notes: {
-      annualDiscount: 'Paying annually represents a 5% discount off monthly tuition.',
-      siblingDiscount: '10% discount applied to the tuition of the child with the lower rate.',
-      earlyDropOff:
-        'For the school day program, early drop-offs before 8:30 AM may be arranged with ' +
-        'the school for an additional fee.',
-      proration:
-        'Tuition is not prorated. Monthly rates already account for school closing days.',
-      registrationFees:
-        'A one-time application fee, a one-time family fee, and a refundable security ' +
-        'deposit are due at registration. Amounts are not published in the handbook — ' +
-        'contact the school.',
-    },
   },
 });

@@ -134,7 +134,7 @@ Publishing a price change now rebuilds the site within about a minute.
 
 | Layer | Lives in | Changed by |
 |---|---|---|
-| Tuition (prices, schedules, academic year, discounts & fees) | Sanity `tuition` singleton, falling back to `content/pricing.json` | **The admin, in the Studio** |
+| Tuition (prices, schedules, academic year) | Sanity `tuition` singleton, falling back to `content/pricing.json` | **The admin, in the Studio** |
 | School details (name, address, phone, hours, calendar id, Formspree id) | `content/site-info.json` | Developer |
 | Program identity (name, age range, meal policy) | `src/lib/site.ts` | Developer |
 | Founder bios | `src/lib/site.ts` | Developer |
@@ -154,20 +154,6 @@ Program identity is code. To change one:
 
 The slug is the join key across all five. A Sanity block whose slug matches nothing in
 `PROGRAMS` is ignored; a program with no Sanity block falls back to `content/pricing.json`.
-
-### Fallback rules, and why prices and notes differ
-
-Prices and footnotes deliberately fall back differently, in `mergeTuition()`:
-
-- **Plans** fall back per program. An empty or malformed Studio entry never blanks a
-  tuition table, because a program showing no prices is a broken page.
-- **Notes** are owned outright by the Studio once the document has a `notes` object.
-  Clearing a note there hides it, rather than resurrecting the checked-in text — a missing
-  footnote is not a broken page, and an admin who deletes a note means it.
-
-`content/pricing.json` supplies the notes only when Sanity has none at all.
-
----
 
 ## Quick Reference
 

@@ -6,17 +6,12 @@
  */
 import Layout from '../layouts/Layout.astro';
 import { SITE as siteInfo } from '../lib/site';
-import { getTuition, NOTE_FIELDS } from '../lib/pricing';
+import { getTuition } from '../lib/pricing';
 import { QUOTES, CURRICULUM_AREAS } from '../lib/content';
 import { PROGRAM_PHOTOS } from '../lib/images';
 
-const { academicYear, programs, notes } = await getTuition();
+const { academicYear, programs } = await getTuition();
 const quote = QUOTES.programs;
-
-/** Footnotes with text. A note cleared in the Studio drops out of the list. */
-const shownNotes = NOTE_FIELDS
-  .map(({ key, label }) => ({ label, body: notes[key] }))
-  .filter(n => n.body);
 ---
 
 <Layout
@@ -119,24 +114,6 @@ const shownNotes = NOTE_FIELDS
         );
       })}
 
-      <!-- Discounts & fees — applies across all three programs -->
-      {shownNotes.length > 0 && (
-        <aside class="reveal bg-white rounded-3xl border border-[rgba(44,62,45,0.08)] overflow-hidden">
-          <div class="px-6 md:px-8 py-4 border-b border-[rgba(44,62,45,0.08)] bg-sand/40">
-            <h2 class="font-serif text-base text-forest">Discounts &amp; Fees</h2>
-          </div>
-          <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6 px-6 md:px-8 py-7">
-            {shownNotes.map(note => (
-              <div>
-                <dt class="font-sans text-sage text-[0.66rem] font-semibold uppercase tracking-[0.14em] mb-1.5">
-                  {note.label}
-                </dt>
-                <dd class="font-sans text-[var(--muted)] text-sm leading-relaxed">{note.body}</dd>
-              </div>
-            ))}
-          </dl>
-        </aside>
-      )}
     </div>
   </section>
 

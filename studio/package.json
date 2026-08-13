@@ -8,9 +8,9 @@
     "deploy": "sanity deploy"
   },
   "dependencies": {
-    "react": "^18.3.0",
-    "react-dom": "^18.3.0",
-    "sanity": "^3.57.0",
-    "styled-components": "^6.5.2"
+    "react": "^19.2.2",
+    "react-dom": "^19.2.2",
+    "sanity": "^6.9.2",
+    "styled-components": "^6.1.15"
   }
 }

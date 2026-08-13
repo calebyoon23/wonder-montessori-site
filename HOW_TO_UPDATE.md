@@ -47,15 +47,6 @@ Write prices exactly as they should appear, including the dollar sign and comma:
 If you type something in a different format the Studio shows a yellow warning — it will
 still publish, but double-check it looks right on the site.
 
-**Discounts & Fees** — five short notes shown underneath the tuition tables: the annual
-payment discount, the sibling discount, early drop-off, proration, and registration fees.
-Edit them like any other field.
-
-- **To hide a note**: delete all the text in it. The note disappears from the site
-  entirely; the rest stay put.
-- The registration fees note currently says the amounts aren't published. If that changes,
-  put the real figures in — families ask about this constantly.
-
 > **Every year:** when the new Tuition Plans document is finalized, update the Academic
 > Year and every price here so the website matches it.
 
