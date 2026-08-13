@@ -39,16 +39,22 @@ If Sanity is never configured, or the API is down at build time, the site builds
 
 ## Step 3 — Point the Studio at the project
 
-The Studio reads its project id from its own environment file:
+The Studio reads its project id from its own environment file. Both the Studio and the
+`sanity` command line tool pick it up from there — `sanity.cli.ts` passes it to the CLI,
+which is what `sanity deploy` needs to know where to publish.
 
 ```bash
 cd studio
 echo "SANITY_STUDIO_PROJECT_ID=abc123de" > .env
 npm install
+npx sanity login          # opens a browser to authorize the CLI
 npm run dev
 ```
 
 Visit **http://localhost:3333** and log in with your Sanity account.
+
+> The hosted address (`https://<name>.sanity.studio`) does **not** exist yet and will
+> return 404 until you run Step 5. Until then, `localhost:3333` is the only way in.
 
 ---
 
