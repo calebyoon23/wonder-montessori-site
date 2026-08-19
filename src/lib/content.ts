@@ -68,11 +68,11 @@ export const CURRICULUM_AREAS = [
 export const CREDENTIALS = [
   {
     title: 'Montessori Credentials',
-    body: 'Our head directresses are certified by accredited educational institutions, and every classroom head teacher either holds a Montessori credential or is undertaking Montessori training certification.',
+    body: 'Our head directresses either hold certification from accredited educational institutions or are undertaking Montessori training certification, and every classroom head teacher either holds a Montessori credential or is working toward one.',
   },
   {
     title: 'Early Childhood Education',
-    body: 'Teachers hold Early Childhood Education credentials, and staff beginning Montessori studies are required to have an academic degree and experience in early childhood education.',
+    body: 'Our teachers have academic experience in early childhood education, though not all hold Early Childhood Education certification. Staff beginning Montessori studies are required to have an academic degree and experience in early childhood education.',
   },
   {
     title: 'Ongoing Training',

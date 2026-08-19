@@ -56,7 +56,7 @@ export const PROGRAMS: ProgramInfo[] = [
   {
     slug: 'primary',
     name: '3–6 Primary',
-    ageRange: '3 – 6+ years',
+    ageRange: '3 – 6 years',
     mealNote:
       'All schedules include catered organic lunches and snacks. Children must be fully ' +
       'potty-trained for this program.',
@@ -76,11 +76,11 @@ export const FOUNDERS: Person[] = [
   {
     name: 'Dr. Gwen Ku',
     title: 'Co-Founder & Directress',
-    bio: 'Educated in Seoul and the United States, Dr. Gwen Ku holds bachelor’s and master’s degrees in education and completed further training in the Montessori curriculum. After teaching in suburban Montessori schools and finding them short on the diversity she valued, she founded Wonder Montessori in October 1993.',
+    bio: 'Educated in Seoul and the United States, Dr. Gwen Ku holds bachelor’s and doctorate degrees in education and completed further training in the Montessori curriculum. After teaching in suburban Montessori schools and finding them short on the diversity she valued, she founded Wonder Montessori in October 1993.',
   },
   {
     name: 'Dr. Peter Ku',
-    title: 'Co-Founder & Director',
-    bio: 'Dr. Peter Ku holds bachelor’s and master’s degrees in education, earned in Seoul and the United States, and built a career in business before joining Gwen in founding the school. He leads Wonder Montessori’s administration and its long-term commitment to the families it serves.',
+    title: 'Co-Founder',
+    bio: 'Dr. Peter Ku holds bachelor’s and doctorate degrees in education, earned in Seoul and the United States, and built a career in business before joining Gwen in founding the school. He leads Wonder Montessori’s administration and its long-term commitment to the families it serves.',
   },
 ];

@@ -20,7 +20,7 @@ import { defineType, defineField, defineArrayMember } from 'sanity';
 const PROGRAM_SLUGS = [
   { title: 'Infant & Toddlers (3–15+ months)', value: 'infant-toddlers' },
   { title: "Toddler & Two's (15–36+ months)",  value: 'toddler-twos' },
-  { title: '3–6 Primary (3–6+ years)',         value: 'primary' },
+  { title: '3–6 Primary (3–6 years)',          value: 'primary' },
 ];
 
 export const tuitionSchema = defineType({
